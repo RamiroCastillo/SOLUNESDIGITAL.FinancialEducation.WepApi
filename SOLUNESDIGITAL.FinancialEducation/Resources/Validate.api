@@ -1,0 +1,94 @@
+{
+  "Completed": {
+    "LongName": "Servicio completado",
+    "Code": "000"
+  },
+  "CategoryNotFound": {
+    "LongName": "El código de rubro no existe o no esta habilitado.",
+    "Code": "098"
+  },
+  "CompanyNotFound": {
+    "LongName": "El código de empresa no existe o no esta habilitado.",
+    "Code": "098"
+  },
+  "CategoriesNotEnabled": {
+    "LongName": "Las empresas para el rubro respectivo no estan habilitadas",
+    "Code": "098"
+  },
+  "EmptyParameters": {
+    "LongName": "Algun parametro de entrada esta siendo enviado de forma nula o vacia",
+    "Code": "004"
+  },
+  "NotLogin": {
+    "LongName": "No existe una sessión activa",
+    "Code": "001"
+  },
+  "NotAuthenticated": {
+    "LongName": "Usuario sin acceso.",
+    "Code": "002"
+  },
+  "NotUnauthorized": {
+    "LongName": "Usuario no autorizado.",
+    "Code": "003"
+  },
+  "NotPendingPayments": {
+    "LongName": "El usuario no tiene deudas pendientes",
+    "Code": "000"
+  },
+  "InvalidTransaction": {
+    "LongName": "Transacción Invalida",
+    "Code": "012"
+  },
+  "NotFoundService": {
+    "LongName": "El código de servicio no existe o no esta habilitado.",
+    "Code": "098"
+  },
+  "InvalidAmount": {
+    "LongName": "Monto invalido para la transaccion",
+    "Code": "013"
+  },
+  "InvalidCard": {
+    "LongName": "Numero de Tarjeta invalido",
+    "Code": "014"
+  },
+  "ExpireDateCard": {
+    "LongName": "Tarjeta expirada",
+    "Code": "033"
+  },
+  "NotCreditAccount": {
+    "LongName": "La cuenta no tiene credito suficiente",
+    "Code": "033"
+  },
+  "NotSufficentFunds": {
+    "LongName": "No se tiene suficientes fondos para la transaccion",
+    "Code": "051"
+  },
+  "NotCheckingAccount": {
+    "LongName": "No se verificar la cuenta",
+    "Code": "052"
+  },
+  "NotSaveAccount": {
+    "LongName": "No se guardo la cuenta",
+    "Code": "053"
+  },
+  "Exception": {
+    "LongName": "Excepción",
+    "Code": "099"
+  },
+  "PaymentNotMade": {
+    "LongName": "El pago de servicio no se realizó",
+    "Code": "098"
+  },
+  "ServiceNotWorking": {
+    "LongName": "Ha ocurrido un error y puede que el servicio no este disponible temporalmente",
+    "Code": "098"
+  },
+  "Sql": {
+    "LongName": "Ha ocurrido un error y puede que el servicio no este disponible temporalmente",
+    "Code": "097"
+  },
+  "Error": {
+    "LongName": "Error General",
+    "Code": "099"
+  }
+}

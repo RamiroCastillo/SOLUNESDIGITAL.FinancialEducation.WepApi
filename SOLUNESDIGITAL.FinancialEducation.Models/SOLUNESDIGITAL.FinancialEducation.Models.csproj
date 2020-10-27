@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="V1\Responses\" />
+    <Folder Include="V1\Requests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SOLUNESDIGITAL.Framework.Common\SOLUNESDIGITAL.Framework.Common.csproj" />
+  </ItemGroup>
+
+</Project>
