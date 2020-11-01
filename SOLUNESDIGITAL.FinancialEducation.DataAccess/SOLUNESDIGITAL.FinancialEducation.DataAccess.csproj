@@ -5,14 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="V1\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SOLUNESDIGITAL.FinancialEducation.Core\SOLUNESDIGITAL.FinancialEducation.Core.csproj" />
+    <ProjectReference Include="..\SOLUNESDIGITAL.FinancialEducation.Models\SOLUNESDIGITAL.FinancialEducation.Models.csproj" />
     <ProjectReference Include="..\SOLUNESDIGITAL.Framework.Common\SOLUNESDIGITAL.Framework.Common.csproj" />
     <ProjectReference Include="..\SOLUNESDIGITAL.Framework.Logs\SOLUNESDIGITAL.Framework.Logs.csproj" />
   </ItemGroup>
