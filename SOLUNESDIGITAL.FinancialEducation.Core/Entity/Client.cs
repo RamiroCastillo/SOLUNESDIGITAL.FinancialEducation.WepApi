@@ -27,7 +27,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Core.Entity
         public Role Role { get; set; }
         public string VerificationTokenEmail { get; set; } 
         public DateTime? Verified { get; set; }
-        public bool IsVerified => Verified.HasValue || PasswordReset.HasValue;
+        public bool IsVerified { get; set; }
         public string ResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
         public DateTime? PasswordReset { get; set; }
@@ -58,6 +58,5 @@ namespace SOLUNESDIGITAL.FinancialEducation.Core.Entity
             public DateTime ModificationDate { get; set; }
             public bool State { get; set; }
         }
-
     }
 }

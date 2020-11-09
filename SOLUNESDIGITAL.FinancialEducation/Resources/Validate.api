@@ -1,18 +1,50 @@
 ﻿{
   "Completed": {
-    "LongName": "Servicio completado",
+    "LongName": "Servicio completado.",
     "Code": "000"
   },
   "AlreadyRegisteredEmail": {
-    "LongName": "El correo o el carnet de identidad ingresado ya fueron registrados anteriormente",
+    "LongName": "El correo o el carnet de identidad ingresado ya fueron registrados anteriormente.",
     "Code": "000"
   },
   "PreRegistredCompleted": {
-    "LongName": "Pre registro exitoso, revisar el correo para validar la creación de la cuenta",
+    "LongName": "Pre registro exitoso, revisar el correo para validar la creación de la cuenta.",
+    "Code": "000"
+  },
+  "VerifyEmailComplete": {
+    "LongName": "Verificación de correo completada, ya puede iniciar sesión.",
+    "Code": "000"
+  },
+  "RegistrationCompleted": {
+    "LongName": "Registro completo terminado.",
+    "Code": "000"
+  },
+  "ForgotPasswordCheck": {
+    "LongName": "Consulte su correo electrónico para obtener instrucciones para restablecer la contraseña.",
+    "Code": "000"
+  },
+  "PasswordResetSuccessful": {
+    "LongName": "Restablecimiento de contraseña exitoso, ahora puede iniciar sesión.",
+    "Code": "000"
+  },
+  "LoginSuccessful": {
+    "LongName": "Inicio de sesión exitoso.",
+    "Code": "000"
+  },
+  "Winners": {
+    "LongName": "Obtención de ganadores existoso.",
+    "Code": "000"
+  },
+  "TokenRevokeSuccessful": {
+    "LongName": "Revocación de token exitosa.",
+    "Code": "000"
+  },
+  "TokenRefreshSuccessful": {
+    "LongName": "Actualización de token exitosa.",
     "Code": "000"
   },
   "NotLogin": {
-    "LongName": "No existe una sessión activa",
+    "LongName": "El usuario o contraseña son incorrectos.",
     "Code": "001"
   },
   "NotAuthenticated": {
@@ -31,9 +63,33 @@
     "LongName": "El Cliente a registrase no es mayor de edad.",
     "Code": "005"
   },
+  "ErrorVerifyemail": {
+    "LongName": "Error al verificar el correo electronico",
+    "Code": "006"
+  },
   "AnswerRegistred": {
     "LongName": "Servicio de registro de respuesta correcta completado.",
-    "Code": "006"
+    "Code": "007"
+  },
+  "ErrorRegistrationComplete": {
+    "LongName": "Error al realizar el registro compelto revise si realizo el preregistro.",
+    "Code": "008"
+  },
+  "ErrorGeneredTokeRefresh": {
+    "LongName": "Error al generar un token de actualización.",
+    "Code": "009"
+  },
+  "ErrorResetPassword": {
+    "LongName": "Error al restablecer la contraseña.",
+    "Code": "010"
+  },
+  "NotAnswerQuestion": {
+    "LongName": "Error al recuperar las preguntas y respuestas.",
+    "Code": "011"
+  },
+  "ErrorRevokeToken": {
+    "LongName": "Error al remover el token.",
+    "Code": "012"
   },
   "Exception": {
     "LongName": "Excepción",

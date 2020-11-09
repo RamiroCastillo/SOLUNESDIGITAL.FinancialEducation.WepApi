@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
+namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
 {
-    public class TokenRefreshRequest : Token.TokenPublic
+    public class ForgotPasswordResponse
     {
         public string Email { get; set; }
     }

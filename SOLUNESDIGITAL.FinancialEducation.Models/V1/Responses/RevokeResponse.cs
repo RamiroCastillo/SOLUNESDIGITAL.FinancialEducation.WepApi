@@ -4,9 +4,8 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
 {
-    public class PreRegistrationResponse
+    public class RevokeResponse
     {
-        public string Email { get; set; }
-        public string Ci { get; set; }
+        public string Token { get; set; }
     }
 }

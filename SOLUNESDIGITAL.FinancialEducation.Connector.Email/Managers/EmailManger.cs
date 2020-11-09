@@ -11,8 +11,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.Connector.Email.Managers
 {
     public interface IEmailManager
     {
-        public Response sendEmail(string to, string subject, string withOriginMessage, string withoutOriginMessage, string header, string origin, string link);
-    }
+        public Response SendEmail(string to, string subject, string withOriginMessage, string withoutOriginMessage, string header, string origin, string link, string token = "");
+    } 
 
     public class EmailManager : IEmailManager
     {
@@ -39,7 +39,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Connector.Email.Managers
         }
 
 
-        public Response sendEmail(string to, string subject,string withOriginMessage, string withoutOriginMessage,string header,string origin, string link)
+        public Response SendEmail(string to, string subject,string withOriginMessage, string withoutOriginMessage,string header,string origin, string link, string token = "")
         {
             Response response = new Response();
             string finalMessage = "";
@@ -81,7 +81,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Connector.Email.Managers
                 if (!string.IsNullOrEmpty(item))
                 {
                     message.To.Add(item);
-                    message.Body = finalMessage.Replace("@email", item).Replace("@link", link).Replace("@Bussines", _from).Replace("@header",header);
+                    message.Body = finalMessage.Replace("@email", item).Replace("@link", link).Replace("@Bussines", _from).Replace("@header",header).Replace("@token",token);
                 }
             }
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;

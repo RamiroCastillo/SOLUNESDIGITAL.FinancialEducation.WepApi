@@ -7,7 +7,7 @@ namespace SOLUNESDIGITAL.Framework.Common
 {
     public class Tools
     {
-        public static string randomTokenString()
+        public static string RandomTokenString()
         {
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[20];

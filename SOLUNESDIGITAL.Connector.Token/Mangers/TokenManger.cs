@@ -11,7 +11,7 @@ namespace SOLUNESDIGITAL.Connector.Token.Mangers
     public interface ITokenManger
     {
         string GenerateAccessToken(IEnumerable<Claim> claims);
-        string GenerateRefreshToken();
+        FinancialEducation.Core.Entity.RefreshToken GenerateRefreshToken(string ipAddress, double timeExpires);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
     public class TokenManger : ITokenManger
@@ -46,14 +46,18 @@ namespace SOLUNESDIGITAL.Connector.Token.Mangers
             return tokenString;
         }
 
-        public string GenerateRefreshToken()
+        public FinancialEducation.Core.Entity.RefreshToken GenerateRefreshToken(string ipAddress, double timeExpires)
         {
             var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+
+            return new FinancialEducation.Core.Entity.RefreshToken
             {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
+                Token = Convert.ToBase64String(randomNumber),
+                Expires = DateTime.UtcNow.AddDays(timeExpires),
+                CreatedByIp = ipAddress
+            };
         }
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -72,8 +76,7 @@ namespace SOLUNESDIGITAL.Connector.Token.Mangers
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");

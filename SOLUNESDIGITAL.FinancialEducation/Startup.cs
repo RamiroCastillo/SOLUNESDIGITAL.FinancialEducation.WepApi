@@ -60,6 +60,9 @@ namespace SOLUNESDIGITAL.FinancialEducation
             services.AddSingleton<IConsumptionHistory, ConsumptionHistory>(f => new ConsumptionHistory(connectionDbApi, dbApiTimeout));
             services.AddSingleton<IUser, User>(f => new User(connectionDbApi, dbApiTimeout));
             services.AddSingleton<IUserPolicy, UserPolicy>(f => new UserPolicy(connectionDbApi, dbApiTimeout));
+            services.AddSingleton<IRefreshToken, RefreshToken>(f => new RefreshToken(connectionDbApi, dbApiTimeout));
+            services.AddSingleton<IModule, Module>(f => new Module(connectionDbApi, dbApiTimeout));
+            services.AddSingleton<IClienAnswer, ClienAnswer>(f => new ClienAnswer(connectionDbApi, dbApiTimeout));
             #endregion
 
 

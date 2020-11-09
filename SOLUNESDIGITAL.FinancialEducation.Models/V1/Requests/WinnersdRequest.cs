@@ -4,8 +4,7 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
 {
-    public class TokenRefreshRequest : Token.TokenPublic
+    public class WinnersdRequest : Token.TokenPublic
     {
-        public string Email { get; set; }
     }
 }

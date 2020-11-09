@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
 {
@@ -18,6 +19,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
             public long IdQuestion { get; set; }
             public string QuestionEvalute { get; set; }
             public string QuestionDetail { get; set; }
+            [JsonIgnore]
+            public string AnswerWithoutProcess { get; set; }
 
             public List<Answer> Answers { get; set; }
 

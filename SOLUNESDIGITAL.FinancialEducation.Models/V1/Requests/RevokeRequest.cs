@@ -5,11 +5,14 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
 {
-    public class LoginRequest
+    public class RevokeRequest: Token.TokenPublic
     {
         [Required]
         public string Email { get; set; }
+        public string Token { get; set; }
         [Required]
-        public string Password { get; set; }
+        public string UserAplication { get; set; }
+        [Required]
+        public string PasswordAplication { get; set; }
     }
 }

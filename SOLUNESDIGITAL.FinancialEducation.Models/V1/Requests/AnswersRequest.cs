@@ -5,10 +5,14 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
 {
-    public class AnswersRequest
+    public class AnswersRequest : Token.TokenPublic
     {
         [Required]
-        public long IdCliente { get; set; }
+        public string UserAplication { get; set; }
+        [Required]
+        public string PasswordAplication { get; set; }
+        [Required]
+        public string Email { get; set; }
         [Required]
         public long IdModule { get; set; }
         [Required]

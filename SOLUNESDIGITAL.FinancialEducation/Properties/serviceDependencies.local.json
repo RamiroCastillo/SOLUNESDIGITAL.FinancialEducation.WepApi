@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/financialeducationdbserver/databases/BD_API_ECOFUTURO",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings_DB/Password",
+      "secretStore": "LocalSecretsFile"
+    }
+  }
+}

@@ -8,7 +8,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
     public class RegistrationCompleteRequest : Token.TokenPublic
     {
         [Required]
-        public long Id { get; set; }
+        public string Email { get; set; }
         [Required]
         public string NameComplete { get; set; }
         [Required]
@@ -34,5 +34,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
         public string ReferenceName { get; set; }
         [Required]
         public string ReferencePhone { get; set; }
+        public string UserAplication { get; set; }
+        public string PasswordAplication { get; set; }
+
     }
 }
