@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SOLUNESDIGITAL.FinancialEducation.Core\SOLUNESDIGITAL.FinancialEducation.Core.csproj" />
+    <ProjectReference Include="..\SOLUNESDIGITAL.FinancialEducation.Models\SOLUNESDIGITAL.FinancialEducation.Models.csproj" />
   </ItemGroup>
 
 </Project>

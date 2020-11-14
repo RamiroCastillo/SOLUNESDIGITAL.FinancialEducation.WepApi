@@ -43,6 +43,10 @@
     "LongName": "Actualización de token exitosa.",
     "Code": "000"
   },
+  "QuestionsAnswersSuccessful": {
+    "LongName": "Obtención de preguntas y respuestas exitosas.",
+    "Code": "000"
+  },
   "NotLogin": {
     "LongName": "El usuario o contraseña son incorrectos.",
     "Code": "001"
@@ -90,6 +94,22 @@
   "ErrorRevokeToken": {
     "LongName": "Error al remover el token.",
     "Code": "012"
+  },
+  "NotVerifyEmail": {
+    "LongName": "No puede iniciar sesión por favor confirme la creacion de su cuenta en su correo",
+    "Code": "013"
+  },
+  "InvalidToken": {
+    "LongName": "Token invalido.",
+    "Code": "014"
+  },
+  "ClientNotSession": {
+    "LongName": "El cliente no esta autorizado, no es el mismo de la sesión",
+    "Code": "015"
+  },
+  "ClientFinallyModule": {
+    "LongName": "El cliente ya finalizó este módulo y no puede volver a realizarlo.",
+    "Code": "016"
   },
   "Exception": {
     "LongName": "Excepción",

@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SOLUNESDIGITAL.FinancialEducation.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,7 +13,7 @@ namespace SOLUNESDIGITAL.Connector.Token.Mangers
     {
         string GenerateAccessToken(IEnumerable<Claim> claims);
         FinancialEducation.Core.Entity.RefreshToken GenerateRefreshToken(string ipAddress, double timeExpires);
-        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        Response GetPrincipalFromExpiredToken(string token);
     }
     public class TokenManger : ITokenManger
     {
@@ -60,8 +61,9 @@ namespace SOLUNESDIGITAL.Connector.Token.Mangers
             };
         }
 
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        public Response GetPrincipalFromExpiredToken(string token)
         {
+            Response response = new Response();
             var secretKey = Environment.GetEnvironmentVariable("SECRETKEY");
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -78,10 +80,22 @@ namespace SOLUNESDIGITAL.Connector.Token.Mangers
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)) 
+            {
+                var validateError = Response.Error("InvalidToken");
+                response.Message = validateError.Message.ToString();
+                response.State = validateError.State.ToString();
+                response.Data = null;
 
-            return principal;
+                return response;
+            }
+            var validated = Response.Success(principal,"TokenCorrect");
+
+            response.Message = validated.Message.ToString();
+            response.State = validated.State.ToString();
+            response.Data = validated.Data;
+
+            return response;
 
         }
     }

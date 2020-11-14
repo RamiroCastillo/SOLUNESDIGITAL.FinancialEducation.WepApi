@@ -17,6 +17,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
         public class Question
         {
             public long IdQuestion { get; set; }
+            public string FieldType { get; set; }            
             public string QuestionEvalute { get; set; }
             public string QuestionDetail { get; set; }
             [JsonIgnore]

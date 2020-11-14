@@ -44,6 +44,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                                                  let question = new QuestionAswerResponse.Question()
                                                                  {
                                                                      IdQuestion = Convert.ToInt64(dataRow["PREG_PREGUNTA_ID_BI"]),
+                                                                     FieldType = dataRow["PREG_TIPO_CAMPO_VC"].ToString(),
                                                                      QuestionEvalute = dataRow["PREG_PREGUNTA_VC"].ToString(),
                                                                      QuestionDetail = dataRow["PREG_PREGUNTA_DESCRIPCION_VC"].ToString(),
                                                                      AnswerWithoutProcess = dataRow["RESPUESTAS"].ToString()

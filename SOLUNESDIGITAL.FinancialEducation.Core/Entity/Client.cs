@@ -31,6 +31,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Core.Entity
         public string ResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
         public DateTime? PasswordReset { get; set; }
+        public int CurrentModule { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
         public bool CompleteRegister { get; set; }
         public string CreationUser { get; set; }

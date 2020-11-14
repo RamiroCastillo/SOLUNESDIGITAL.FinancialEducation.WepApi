@@ -23,13 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOLUNESDIGITAL.FinancialEdu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{956899DF-21CE-4DA1-A73B-DBE8CCAC5A35}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Security", "Security", "{CE475CF6-5950-400A-B6C8-E7D28DB4DD35}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOLUNESDIGITAL.FinancialEducation.Core", "SOLUNESDIGITAL.FinancialEducation.Core\SOLUNESDIGITAL.FinancialEducation.Core.csproj", "{8E6F6A30-DA86-47AE-9CA8-05704F90EA27}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOLUNESDIGITAL.Connector.Token", "SOLUNESDIGITAL.Connector.Token\SOLUNESDIGITAL.Connector.Token.csproj", "{3ED422B8-F503-4E9D-B673-8E8D6C72A6D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOLUNESDIGITAL.FinancialEducation.Connector.Email", "SOLUNESDIGITAL.FinancialEducation.Connector.Email\SOLUNESDIGITAL.FinancialEducation.Connector.Email.csproj", "{47176F42-D252-46A4-A5DC-2A4000CC77E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SOLUNESDIGITAL.FinancialEducation.Connector.Email", "SOLUNESDIGITAL.FinancialEducation.Connector.Email\SOLUNESDIGITAL.FinancialEducation.Connector.Email.csproj", "{47176F42-D252-46A4-A5DC-2A4000CC77E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,8 +6,9 @@ using System;
 using BC = BCrypt.Net.BCrypt;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
-
+using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 
 namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
 {
@@ -20,6 +21,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
         Response UpdateClientForgotPassword(string email, string resetToken);
         Response UpdateByEmailForChangePassword(string email, string resetToken, string newPassword);
         Response GetClientCompleteRegistration(string email);
+        Response GetInformationClient(string email);
     }
 
     public class Client : IClient
@@ -201,7 +203,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                 Password = dataTable.Rows[0]["CLIE_CLAVE_VC"].ToString(),
                                 Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 0 ? Role.Admin : Role.User,
                                 IsVerified = Convert.ToBoolean(dataTable.Rows[0]["CLIE_ESTADO_VERIFICACION_BT"]),
-                                CompleteRegister = Convert.ToBoolean(dataTable.Rows[0]["CLIE_REGISTRO_COMPLETO_BT"])
+                                CompleteRegister = Convert.ToBoolean(dataTable.Rows[0]["CLIE_REGISTRO_COMPLETO_BT"]),
+                                CurrentModule = Convert.ToInt32(dataTable.Rows[0]["MODULO_ACTUAL"])
                             };
 
                             if (BC.Verify(password, result.Password))
@@ -354,6 +357,75 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                             Core.Entity.Client result = new Core.Entity.Client
                             {
                                 Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
+                            };
+
+                            return Response.Success(result);
+                        }
+                        else
+                        {
+                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ErrorResetPassword"), SerializeJson.ToObject(dataTable));
+                            return Response.Error(null, "ErrorResetPassword");
+                        }
+                    }
+                    else
+                    {
+                        Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotLogin"), SerializeJson.ToObject(dataTable));
+                        return Response.Error(null, "NotLogin");
+                    }
+                }
+                else
+                {
+                    Logger.Error("Message: {0}; StoreProcedure.Error: {1}", Response.CommentMenssage("Sql"), storeProcedure.Error);
+                    return Response.Error(storeProcedure.Error, "Sql");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Message: {0} Exception: {1}", ex.Message, SerializeJson.ToObject(ex));
+                return Response.Error(ex, "Error");
+            }
+        }
+
+        public Response GetInformationClient(string email)
+        {
+            try
+            {
+                StoreProcedure storeProcedure = new StoreProcedure("weco.CLIENTE_GetInformationClient");
+                storeProcedure.AddParameter("@CLIE_CORREO_ELECTRONICO_VC", email);
+                DataTable dataTable = storeProcedure.ReturnData(_connection, _timeOut);
+                Logger.Debug("StoreProcedure: {0} DataTable: {1}", SerializeJson.ToObject(storeProcedure), SerializeJson.ToObject(dataTable));
+                if (storeProcedure.Error.Length <= 0)
+                {
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        if (dataTable.Rows[0]["RESULTADO"].ToString().Equals("00"))
+                        {
+                            List<MyInformationResponse.FinishedModule> addfinishedModules = new List<MyInformationResponse.FinishedModule>();
+                            addfinishedModules.AddRange(from string item in dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString().Split("@")
+                                                        let moduleFinish = new MyInformationResponse.FinishedModule()
+                                                        {
+                                                            ModuleNumber = Convert.ToInt32(item.Substring(0,item.IndexOf(":"))),
+                                                            Coupon = item.Substring(item.IndexOf(":") + 1)
+                                                        }
+                                                        select moduleFinish);
+                            MyInformationResponse result = new MyInformationResponse
+                            {
+                                Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
+                                Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
+                                NameComplete = dataTable.Rows[0]["CLIE_NOMBRE_COMPLETO_VC"].ToString(),
+                                Gender = dataTable.Rows[0]["CLIE_GENERO_VC"].ToString(),
+                                Age = Convert.ToInt32(dataTable.Rows[0]["CLIE_EDAD_IN"]),
+                                Department = dataTable.Rows[0]["CLIE_DEPARTAMENTO_VC"].ToString(),
+                                City = dataTable.Rows[0]["CLIE_CIUDAD_VC"].ToString(),
+                                Address = dataTable.Rows[0]["CLIE_DIRECCION_VC"].ToString(),
+                                CellPhone = dataTable.Rows[0]["CLIE_NUMERO_CELULAR_VC"].ToString(),
+                                Phone = dataTable.Rows[0]["CLIE_NUMERO_FIJO_VC"].ToString(),
+                                EducationLevel = dataTable.Rows[0]["CLIE_NIVEL_EDUCACION_VC"].ToString(),
+                                Disability = Convert.ToBoolean(dataTable.Rows[0]["CLIE_DISCAPACIDAD_BT"]),
+                                Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 1 ? "User" : "Admin",
+                                CompleteRegister = Convert.ToBoolean(dataTable.Rows[0]["CLIE_REGISTRO_COMPLETO_BT"]),
+                                CurrentModule = Convert.ToInt32(dataTable.Rows[0]["MODULO_ACTUAL"]),
+                                finishedModules = addfinishedModules
                             };
 
                             return Response.Success(result);

@@ -16,6 +16,7 @@ using SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 using SOLUNESDIGITAL.Framework.Logs;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
 {
@@ -36,8 +37,9 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
         private readonly IModule _module;
         private readonly double _scoreByQuestion;
         private readonly IClienAnswer _clientAnswer;
+        private readonly IClientModule _clientModule;
 
-        public ClientServiceController(IConfiguration configuration, ILogger logger, IUser user, IUserPolicy userPolicy, IClient client, IConsumptionHistory consumptionHistory, ITokenManger tokenManager, IRefreshToken refreshToken, IModule module, IClienAnswer clientAnswer)
+        public ClientServiceController(IConfiguration configuration, ILogger logger, IUser user, IUserPolicy userPolicy, IClient client, IConsumptionHistory consumptionHistory, ITokenManger tokenManager, IRefreshToken refreshToken, IModule module, IClienAnswer clientAnswer, IClientModule clientModule)
         {
             _configuration = configuration;
             _logger = logger;
@@ -51,13 +53,14 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
             _module = module;
             _scoreByQuestion = configuration.GetValue<double>("DetailScore:Score") / ((configuration.GetValue<double>("DetailScore:Modules")) + 1);
             _clientAnswer = clientAnswer;
+            _clientModule = clientModule;
         }
 
         [Route("RegistrationComplete")]
         [HttpPost, Authorize]
         public IActionResult RegistrationComplete([FromBody] RegistrationCompleteRequest registrationCompleteRequest)
         {
-                Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(registrationCompleteRequest));
+            Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(registrationCompleteRequest));
             DateTime dateRequest = DateTime.Now;
             var response = new IResponse<RegistrationCompleteResponse>();
             string correlationId = string.Empty;
@@ -111,6 +114,31 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
                 #endregion
+
+                AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var credentialToken = authHeader.Parameter;
+                var responsetokenValidated = _tokenManager.GetPrincipalFromExpiredToken(credentialToken);
+
+                if (responsetokenValidated.Data == null) 
+                {
+                    response.Data = null;
+                    response.Message = responsetokenValidated.Message;
+                    response.State = responsetokenValidated.State;
+                    return BadRequest(response);
+                }
+                var principal = (ClaimsPrincipal)responsetokenValidated.Data;
+                var claimList = principal.Claims.ToList();
+                var verifyEmail = claimList[2].Value;
+
+                if (!verifyEmail.Equals(registrationCompleteRequest.Email.Trim())) 
+                {
+                    var validate = Models.Response.Error("ClientNotSession");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return BadRequest(response);
+                }
+
                 if (registrationCompleteRequest.Age <= 18 && (DateTime.Now.Year - registrationCompleteRequest.Birthdate.Year) <= 18)
                 {
                     var validate = Models.Response.Error("UserNotAgeApropiate");
@@ -118,7 +146,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     response.Message = validate.Message;
                     response.State = validate.State;
                     return BadRequest(response);
-
                 }
                 Core.Entity.Client client = new Core.Entity.Client()
                 {
@@ -266,12 +293,12 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                         {
                             IdAnswer = Convert.ToInt64(answerResponse[0]),
                             DetailAnswer = answerResponse[1].ToString(),
-                            State = answerResponse[2].Equals("1") ? true : false
+                            State = answerResponse[2].Equals("1")
                         });
                     }
                 }
                 response.Data = answerAndQuestionResponse;
-                response.Message = Models.Response.CommentMenssage("Completed");
+                response.Message = Models.Response.CommentMenssage("QuestionsAnswersSuccessful");
                 response.State = "000";
                 return Ok(response);
             }
@@ -323,8 +350,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
 
-                //AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-                //var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(authHeader.Parameter)).Split(':');
                 correlationId = Request.Headers["Correlation-Id"].ToString();
 
                 Core.Entity.User user = new Core.Entity.User()
@@ -361,20 +386,38 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
                 #endregion
-                var questionscore = _scoreByQuestion / answersRequest.Answers.Count;
-                int count = 0;
-                foreach (AnswersRequest.Answer answer in answersRequest.Answers) 
-                {
-                    var clienteAnswerRegistred = _clientAnswer.InsertClientAnswerValidate(answersRequest.Email,answer.IdAnswer,answer.IdQuestion,answer.State, questionscore, answersRequest.AppUserId);
-                    count += Convert.ToInt32(clienteAnswerRegistred.Data);
-                }
-                if (! (count > 0) )
-                {
-                    var validate = Models.Response.Error(null, "sql");
 
+                AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var credentialToken = authHeader.Parameter;
+                var responsetokenValidated = _tokenManager.GetPrincipalFromExpiredToken(credentialToken);
+
+                if (responsetokenValidated.Data == null)
+                {
+                    response.Data = null;
+                    response.Message = responsetokenValidated.Message;
+                    response.State = responsetokenValidated.State;
+                    return BadRequest(response);
+                }
+                var principal = (ClaimsPrincipal)responsetokenValidated.Data;
+                var claimList = principal.Claims.ToList();
+                var verifyEmail = claimList[2].Value;
+
+                if (!verifyEmail.Equals(answersRequest.Email.Trim()))
+                {
+                    var validate = Models.Response.Error("ClientNotSession");
                     response.Data = null;
                     response.Message = validate.Message;
                     response.State = validate.State;
+                    return BadRequest(response);
+                }
+
+                var moduleClient = _clientModule.InsertClientModuleAnswers(answersRequest.Email,answersRequest.IdModule,answersRequest.ModuleNumber, answersRequest.AppUserId);
+                
+                if (moduleClient.Data == null)
+                {
+                    response.Data = null;
+                    response.Message = moduleClient.Message;
+                    response.State = moduleClient.State;
                     return BadRequest(response);
                 }
 
@@ -484,11 +527,19 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 }
 
                 var clientLogin = (Core.Entity.Client)clientValidated.Data;
+                if (!clientLogin.IsVerified) 
+                {
+                    var validate = Models.Response.Error(null, "NotVerifyEmail");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return BadRequest(response);
+                }
                 var claims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Iat,Guid.NewGuid().ToString()),
-                    new Claim(ClaimTypes.Name, clientLogin.NameComplete),
-                    new Claim(ClaimTypes.Email,clientLogin.Email),
+                    new Claim(JwtRegisteredClaimNames.UniqueName, clientLogin.NameComplete),
+                    new Claim(JwtRegisteredClaimNames.Email,clientLogin.Email),
                 };
                 var accessToken = _tokenManager.GenerateAccessToken(claims);
 
@@ -538,11 +589,13 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 response.Data = new AuthenticateResponse()
                 {
                     Email = clientValidatedData.Email,
+                    CurrentModule = clientValidatedData.CurrentModule,
                     Role = clientValidatedData.Role == Core.Entity.Role.Admin ? "Admin" : "User",
                     Verify = clientValidatedData.IsVerified,
                     RegistredCompleted = clientValidatedData.CompleteRegister,
                     Token = accessToken,
                     RefreshToken = refreshToken.Token
+
                 };
                 response.Message = Models.Response.CommentMenssage("LoginSuccessful");
                 response.State = "000";
@@ -576,5 +629,129 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
             }
         }
 
+        [Route("MyInformation")]
+        [HttpPost, Authorize]
+        public IActionResult MyInformation([FromBody] MyInformationRequest myInformationRequest)
+        {
+            Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(myInformationRequest));
+            DateTime dateRequest = DateTime.Now;
+            var response = new IResponse<MyInformationResponse>();
+            string correlationId = string.Empty;
+            try
+            {
+                #region Authorization Usuario y Contraseña
+                if (string.IsNullOrEmpty(Request.Headers["Authorization"]))
+                {
+                    var validate = Models.Response.Error(null, "NotAuthenticated");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return Unauthorized(response);
+                }
+
+                correlationId = Request.Headers["Correlation-Id"].ToString();
+
+                Core.Entity.User user = new Core.Entity.User()
+                {
+                    Public = myInformationRequest.PublicToken,
+                    UserName = myInformationRequest.UserAplication,
+                    Password = myInformationRequest.PasswordAplication
+                };
+                var userAuthenticate = _user.Authenticate(user);
+                if (userAuthenticate.Data == null)
+                {
+                    var validate = Models.Response.Error("NotAuthenticated");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return Unauthorized(response);
+                }
+                Core.Entity.UserPolicy userPolicy = new Core.Entity.UserPolicy()
+                {
+                    AppUserId = myInformationRequest.AppUserId,
+                    IdUser = ((Core.Entity.User)userAuthenticate.Data).Id
+                };
+                Core.Entity.Policy policy = new Core.Entity.Policy()
+                {
+                    Name = Request.Path.Value
+                };
+                var userPolicyAuthorize = _userPolicy.Authorize(userPolicy, policy);
+                if (userPolicyAuthorize.Data == null)
+                {
+                    var validate = Models.Response.Error("NotUnauthorized");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return Unauthorized(response);
+                }
+                #endregion
+
+                AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var credentialToken = authHeader.Parameter;
+                var responsetokenValidated = _tokenManager.GetPrincipalFromExpiredToken(credentialToken);
+
+                if (responsetokenValidated.Data == null)
+                {
+                    response.Data = null;
+                    response.Message = responsetokenValidated.Message;
+                    response.State = responsetokenValidated.State;
+                    return BadRequest(response);
+                }
+                var principal = (ClaimsPrincipal)responsetokenValidated.Data;
+                var claimList = principal.Claims.ToList();
+                var verifyEmail = claimList[2].Value;
+
+                if (!verifyEmail.Equals(myInformationRequest.Email.Trim()))
+                {
+                    var validate = Models.Response.Error("ClientNotSession");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return BadRequest(response);
+                }
+
+                var client = _client.GetInformationClient(myInformationRequest.Email);
+
+                if (client.Data == null)
+                {
+                    response.Data = null;
+                    response.Message = client.Message;
+                    response.State = client.State;
+                    return BadRequest(response);
+                }
+                var clientInformation = (MyInformationResponse)client.Data;
+
+                response.Data = clientInformation;
+                response.Message = Models.Response.CommentMenssage("AnswerRegistred");
+                response.State = "000";
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Message: {0}; Exception: {1}", ex.Message, Framework.Common.SerializeJson.ToObject(ex));
+                response.Data = null;
+                response.Message = "Error General";
+                response.State = "099";
+                return BadRequest(response);
+            }
+            finally
+            {
+                DateTime dateResponse = DateTime.Now;
+                Core.Entity.ConsumptionHistory consumptionHistory = new Core.Entity.ConsumptionHistory
+                {
+                    ApiName = Request.Path.Value,
+                    Host = Dns.GetHostName() + ":" + Request.Host.Port,
+                    CorrelationId = correlationId,
+                    AppUserId = "token",
+                    Request = Framework.Common.SerializeJson.ToObject(myInformationRequest),
+                    DateRequest = dateRequest,
+                    Response = Framework.Common.SerializeJson.ToObject(response),
+                    DateResponse = dateResponse,
+                    CodeResponse = response.State
+                };
+                _consumptionHistory.Insert(consumptionHistory);
+                Logger.Debug("Request: {0} Response: {1}", myInformationRequest, response);
+            }
+        }
     }
 }
