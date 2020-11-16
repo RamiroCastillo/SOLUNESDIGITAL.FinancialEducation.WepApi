@@ -12,6 +12,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
         [Required]
         public string Ci { get; set; }
         [Required]
+        public string CiExpedition { get; set; }
+        [Required]
         public string Password { get; set; }
         [Required]
         public string ConfirmPassword { get; set; }

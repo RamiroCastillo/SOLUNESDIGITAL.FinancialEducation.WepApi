@@ -14,7 +14,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
     public interface IClienAnswer
     {
         Response InsertClientAnswerValidate(string email, long idAnswer, long idQuestion, bool state, double scoreAnswer, string userCreation);
-        Response GetWinners(int numberOfWinners, double score);
     }
 
     public class ClienAnswer : IClienAnswer
@@ -72,51 +71,5 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
             }
         }
 
-        public Response GetWinners(int numberOfWinners, double score)
-        {
-            try
-            {
-                StoreProcedure storeProcedure = new StoreProcedure("weco.CLIENTE_RESPUESTA_GetWinners");
-                storeProcedure.AddParameter("@CANTIDAD_GANADORES", numberOfWinners);
-                storeProcedure.AddParameter("@SCORE", score);
-                DataTable dataTable = storeProcedure.ReturnData(_connection, _timeOut);
-                Logger.Debug("StoreProcedure: {0} DataTable: {1}", SerializeJson.ToObject(storeProcedure), SerializeJson.ToObject(dataTable));
-                if (storeProcedure.Error.Length <= 0)
-                {
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        WinnersdResponse result = new WinnersdResponse();
-                        result.Winners.AddRange(from DataRow dataRow in dataTable.Rows
-                                                let winner = new WinnersdResponse.Winner()
-                                                {
-                                                    Position = Convert.ToInt32(dataRow["POSITION"]),
-                                                    Email = dataRow["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
-                                                    CompleteRegistred = Convert.ToBoolean(dataRow["CLIE_REGISTRO_COMPLETO_BT"].ToString()),                                                    
-                                                    ScoreObtainedEvaluation = Convert.ToDouble(dataRow["PUNTAJE_OBTENIDO_QUIZ"]),
-                                                    ExtraScore = Convert.ToDouble(dataRow["PUNTAJE_EXTRA"]),
-                                                    TotalScore = Convert.ToDouble(dataRow["TOTAL_PUNTAJE"]),
-                                                    QuizEndDate = DateTime.ParseExact(dataTable.Rows[0]["FECHA_FINALIZACION_PRUEBA"].ToString(), "M/d/yyyy h:m:s tt", CultureInfo.InvariantCulture)
-                                                }
-                                                select winner);
-                        return Response.Success(result);
-                    }
-                    else
-                    {
-                        Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("Sql"), SerializeJson.ToObject(dataTable));
-                        return Response.Error(null, "Sql");
-                    }
-                }
-                else
-                {
-                    Logger.Error("Message: {0}; StoreProcedure.Error: {1}", Response.CommentMenssage("Sql"), storeProcedure.Error);
-                    return Response.Error(storeProcedure.Error, "Sql");
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error("Message: {0} Exception: {1}", ex.Message, SerializeJson.ToObject(ex));
-                return Response.Error(ex, "Error");
-            }
-        }
     }
 }

@@ -14,8 +14,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
         [Required]
         public string Email { get; set; }
         [Required]
-        public long IdModule { get; set; }
-        [Required]
         public int ModuleNumber { get; set; }        
     }
 }

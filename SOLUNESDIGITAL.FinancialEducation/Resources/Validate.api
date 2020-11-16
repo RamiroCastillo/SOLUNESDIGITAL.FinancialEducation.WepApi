@@ -47,6 +47,10 @@
     "LongName": "Obtención de preguntas y respuestas exitosas.",
     "Code": "000"
   },
+  "CorrectUserInformation": {
+    "LongName": "Información de cliente devuelta exitosamente",
+    "Code": "000"
+  },
   "NotLogin": {
     "LongName": "El usuario o contraseña son incorrectos.",
     "Code": "001"
@@ -80,15 +84,15 @@
     "Code": "008"
   },
   "ErrorGeneredTokeRefresh": {
-    "LongName": "Error al generar un token de actualización.",
+    "LongName": "Error al generar un token de actualización verifique que el token no fue revocado.",
     "Code": "009"
   },
   "ErrorResetPassword": {
-    "LongName": "Error al restablecer la contraseña.",
+    "LongName": "Error al restablecer la contraseña por favor verifique el correo y que el token sean correctos.",
     "Code": "010"
   },
-  "NotAnswerQuestion": {
-    "LongName": "Error al recuperar las preguntas y respuestas.",
+  "ModuleNotRegistred": {
+    "LongName": "Módulo no existe o no esta registrado.",
     "Code": "011"
   },
   "ErrorRevokeToken": {
@@ -96,7 +100,7 @@
     "Code": "012"
   },
   "NotVerifyEmail": {
-    "LongName": "No puede iniciar sesión por favor confirme la creacion de su cuenta en su correo",
+    "LongName": "No puede iniciar sesión por favor confirme la creación de su cuenta en su correo",
     "Code": "013"
   },
   "InvalidToken": {
@@ -108,7 +112,7 @@
     "Code": "015"
   },
   "ClientFinallyModule": {
-    "LongName": "El cliente ya finalizó este módulo y no puede volver a realizarlo.",
+    "LongName": "El cliente ya finalizó este módulo y no puede volver a realizarlo, verifique el modulo que esta consultando.",
     "Code": "016"
   },
   "Exception": {

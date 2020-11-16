@@ -5,13 +5,13 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
 {
-    public class QuestionAswerRequest : Token.TokenPublic
+    public class SendCertificateRequest : Token.TokenPublic
     {
         [Required]
-        public int ModuleNumber { get; set; }
+        public string NameComplete { get; set; }
         [Required]
-        public string UserAplication { get; set; }
+        public string Ci { get; set; }
         [Required]
-        public string PasswordAplication { get; set; }
+        public string CiExpedition { get; set; }
     }
 }

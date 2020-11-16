@@ -235,7 +235,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
 
-                //AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
                 //var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(authHeader.Parameter)).Split(':');
                 correlationId = Request.Headers["Correlation-Id"].ToString();
 
@@ -274,13 +274,12 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 }
                 #endregion
 
-                var answerAndQuestion = _module.GetAnswerAndQuestions(questionAswerRequest.IdModule);
+                var answerAndQuestion = _module.GetAnswerAndQuestions(questionAswerRequest.ModuleNumber);
                 if (answerAndQuestion.Data == null)
                 {
-                    var validate = Models.Response.Error("NotAnswerQuestion");
                     response.Data = null;
-                    response.Message = validate.Message;
-                    response.State = validate.State;
+                    response.Message = answerAndQuestion.Message;
+                    response.State = answerAndQuestion.State;
                     return Unauthorized(response);
                 }
                 var answerAndQuestionResponse = (QuestionAswerResponse)answerAndQuestion.Data;
@@ -411,7 +410,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return BadRequest(response);
                 }
 
-                var moduleClient = _clientModule.InsertClientModuleAnswers(answersRequest.Email,answersRequest.IdModule,answersRequest.ModuleNumber, answersRequest.AppUserId);
+                var moduleClient = _clientModule.InsertClientModuleAnswers(answersRequest.Email,answersRequest.ModuleNumber, answersRequest.AppUserId);
                 
                 if (moduleClient.Data == null)
                 {
@@ -722,7 +721,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 var clientInformation = (MyInformationResponse)client.Data;
 
                 response.Data = clientInformation;
-                response.Message = Models.Response.CommentMenssage("AnswerRegistred");
+                response.Message = Models.Response.CommentMenssage("CorrectUserInformation");
                 response.State = "000";
                 return Ok(response);
             }

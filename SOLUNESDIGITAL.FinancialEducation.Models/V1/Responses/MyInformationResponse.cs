@@ -22,8 +22,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
         public string Role { get; set; }
         public bool CompleteRegister { get; set; }
         public int CurrentModule { get; set; }
-        [JsonIgnore]
-        public string ModulesFinishComplete { get; set; }
         public  List<FinishedModule> finishedModules { get; set; }
 
         public MyInformationResponse()

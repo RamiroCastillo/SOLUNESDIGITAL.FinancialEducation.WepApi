@@ -4,9 +4,8 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
 {
-    public class VerifyEmailResponse
+    public class SendCertificateResponse
     {
-        public string TokenEmailVerify { get; set; }
-        public bool Verify { get; set; }
+        public string pdfCertificate { get; set; }
     }
 }

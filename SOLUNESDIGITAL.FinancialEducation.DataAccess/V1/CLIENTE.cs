@@ -22,6 +22,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
         Response UpdateByEmailForChangePassword(string email, string resetToken, string newPassword);
         Response GetClientCompleteRegistration(string email);
         Response GetInformationClient(string email);
+        Response GetWinners();
     }
 
     public class Client : IClient
@@ -42,6 +43,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 StoreProcedure storeProcedure = new StoreProcedure("weco.CLIENTE_InsertIfNotexist");
                 storeProcedure.AddParameter("@CLIE_CORREO_ELECTRONICO_VC", client.Email);
                 storeProcedure.AddParameter("@CLIE_CI_VC", client.Ci);
+                storeProcedure.AddParameter("@CLIE_CI_EXPEDICION_VC", client.CiExpedition);                
                 storeProcedure.AddParameter("@CLIE_CLAVE_VC", client.Password);
                 storeProcedure.AddParameter("@CLIE_TERMINOS_Y_CONDICIONES_ACEPTADOS_BT", client.AcceptTerms);
                 storeProcedure.AddParameter("@CLIE_TOKEN_VERIFICACION_EMAIL_VC", client.VerificationTokenEmail);
@@ -60,6 +62,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                             Id = Convert.ToInt64(dataTable.Rows[0]["CLIE_CLIENTE_ID_BI"]),
                             Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
                             Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
+                            CiExpedition = dataTable.Rows[0]["CLIE_CI_EXPEDICION_VC"].ToString(),
                             VerificationTokenEmail = dataTable.Rows[0]["CLIE_TOKEN_VERIFICACION_EMAIL_VC"].ToString(),
                             VerifyExists = Convert.ToBoolean(dataTable.Rows[0]["USER_EXISTS"])
                         };
@@ -401,13 +404,16 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                         if (dataTable.Rows[0]["RESULTADO"].ToString().Equals("00"))
                         {
                             List<MyInformationResponse.FinishedModule> addfinishedModules = new List<MyInformationResponse.FinishedModule>();
-                            addfinishedModules.AddRange(from string item in dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString().Split("@")
-                                                        let moduleFinish = new MyInformationResponse.FinishedModule()
-                                                        {
-                                                            ModuleNumber = Convert.ToInt32(item.Substring(0,item.IndexOf(":"))),
-                                                            Coupon = item.Substring(item.IndexOf(":") + 1)
-                                                        }
-                                                        select moduleFinish);
+                            if (!string.IsNullOrEmpty(dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString())) 
+                            {
+                                addfinishedModules.AddRange(from string item in dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString().Split("@")
+                                                            let moduleFinish = new MyInformationResponse.FinishedModule()
+                                                            {
+                                                                ModuleNumber = Convert.ToInt32(item.Substring(0, item.IndexOf(":"))),
+                                                                Coupon = item.Substring(item.IndexOf(":") + 1)
+                                                            }
+                                                            select moduleFinish);
+                            }
                             MyInformationResponse result = new MyInformationResponse
                             {
                                 Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
@@ -428,6 +434,80 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                 finishedModules = addfinishedModules
                             };
 
+                            return Response.Success(result);
+                        }
+                        else
+                        {
+                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ErrorResetPassword"), SerializeJson.ToObject(dataTable));
+                            return Response.Error(null, "ErrorResetPassword");
+                        }
+                    }
+                    else
+                    {
+                        Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotLogin"), SerializeJson.ToObject(dataTable));
+                        return Response.Error(null, "NotLogin");
+                    }
+                }
+                else
+                {
+                    Logger.Error("Message: {0}; StoreProcedure.Error: {1}", Response.CommentMenssage("Sql"), storeProcedure.Error);
+                    return Response.Error(storeProcedure.Error, "Sql");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Message: {0} Exception: {1}", ex.Message, SerializeJson.ToObject(ex));
+                return Response.Error(ex, "Error");
+            }
+        }
+        public Response GetWinners()
+        {
+            try
+            {
+                StoreProcedure storeProcedure = new StoreProcedure("weco.CLIENTE_GetWinnerbyModule");
+                DataTable dataTable = storeProcedure.ReturnData(_connection, _timeOut);
+                Logger.Debug("StoreProcedure: {0} DataTable: {1}", SerializeJson.ToObject(storeProcedure), SerializeJson.ToObject(dataTable));
+                if (storeProcedure.Error.Length <= 0)
+                {
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        if (dataTable.Rows[0]["RESULTADO"].ToString().Equals("00"))
+                        {
+                            WinnersdResponse result = new WinnersdResponse();
+                            result.Winners.AddRange(from DataRow dataRow in dataTable.Rows
+                                                    let winner = new WinnersdResponse.Winner() 
+                                                    {
+                                                        Position = Convert.ToInt32(dataRow["POSITION"]),
+                                                        Email = dataRow["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
+                                                        Ci = dataRow["CLIE_CI_VC"].ToString(),
+                                                        CiExpedition = dataRow["CLIE_CI_EXPEDICION_VC"].ToString(),
+                                                        NameComplete = dataRow["CLIE_NOMBRE_COMPLETO_VC"].ToString(),
+                                                        Age = Convert.ToInt32(dataRow["CLIE_EDAD_IN"]),
+                                                        Department = dataRow["CLIE_DEPARTAMENTO_VC"].ToString(),
+                                                        City = dataRow["CLIE_CIUDAD_VC"].ToString(),
+                                                        Address = dataRow["CLIE_DIRECCION_VC"].ToString(),
+                                                        CellPhone = dataRow["CLIE_NUMERO_CELULAR_VC"].ToString(),
+                                                        EducationLevel = dataRow["CLIE_NIVEL_EDUCACION_VC"].ToString(),
+                                                        CompleteRegister = Convert.ToBoolean(dataRow["CLIE_REGISTRO_COMPLETO_BT"]),
+                                                        CurrentModule = Convert.ToInt32(dataRow["MODULO_ACTUAL"]),
+                                                        NumberModuleFinished = Convert.ToInt32(dataRow["NUMERO_MODULOS_TERMINADOS"]),
+                                                        ModulesFinishComplete = dataRow["MODULOS_TERMINADOS"].ToString()
+                                                    }
+                                                    select winner);
+                            List<WinnersdResponse.Winner.FinishedModule> addfinishedModules = new List<WinnersdResponse.Winner.FinishedModule>();
+                            foreach (var winner in result.Winners) 
+                            {
+                                if (string.IsNullOrEmpty(winner.ModulesFinishComplete)) break;
+                                foreach (string module in winner.ModulesFinishComplete.Split("@")) 
+                                {
+                                    var finishModule = module.Split(":");
+                                    winner.FinishedModules.Add(new WinnersdResponse.Winner.FinishedModule
+                                    {
+                                        ModuleNumber = Convert.ToInt32(finishModule[0]),
+                                        Coupon = finishModule[1].ToString()
+                                    });
+                                }
+                            }
                             return Response.Success(result);
                         }
                         else

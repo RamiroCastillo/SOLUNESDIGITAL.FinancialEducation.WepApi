@@ -12,7 +12,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
 {
     public interface IModule
     {
-        Response GetAnswerAndQuestions(long idModule);
+        Response GetAnswerAndQuestions(int idModule);
     }
 
     public class Module : IModule
@@ -26,12 +26,12 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
             _timeOut = timeOut;
         }
 
-        public Response GetAnswerAndQuestions(long idModule)
+        public Response GetAnswerAndQuestions(int idModule)
         {
             try
             {
                 StoreProcedure storeProcedure = new StoreProcedure("weco.MODULO_GetAnswerAndQuestions");
-                storeProcedure.AddParameter("@PREG_MODULO_ID_BI", idModule);
+                storeProcedure.AddParameter("@MODU_NUMERO_MODULO_IN", idModule);
                 DataTable dataTable = storeProcedure.ReturnData(_connection, _timeOut);
                 Logger.Debug("StoreProcedure: {0} DataTable: {1}", SerializeJson.ToObject(storeProcedure), SerializeJson.ToObject(dataTable));
 
@@ -39,18 +39,27 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 {
                     if (dataTable.Rows.Count > 0)
                     {
-                        QuestionAswerResponse questionAswerResponse = new QuestionAswerResponse();
-                        questionAswerResponse.Questions.AddRange(from DataRow dataRow in dataTable.Rows
-                                                                 let question = new QuestionAswerResponse.Question()
-                                                                 {
-                                                                     IdQuestion = Convert.ToInt64(dataRow["PREG_PREGUNTA_ID_BI"]),
-                                                                     FieldType = dataRow["PREG_TIPO_CAMPO_VC"].ToString(),
-                                                                     QuestionEvalute = dataRow["PREG_PREGUNTA_VC"].ToString(),
-                                                                     QuestionDetail = dataRow["PREG_PREGUNTA_DESCRIPCION_VC"].ToString(),
-                                                                     AnswerWithoutProcess = dataRow["RESPUESTAS"].ToString()
-                                                                 }
-                                                                 select question);
-                        return Response.Success(questionAswerResponse);
+                        if (!dataTable.Rows[0]["RESULTADO"].ToString().Equals("01"))
+                        {
+                            QuestionAswerResponse questionAswerResponse = new QuestionAswerResponse();
+                            questionAswerResponse.Questions.AddRange(from DataRow dataRow in dataTable.Rows
+                                                                     let question = new QuestionAswerResponse.Question()
+                                                                     {
+                                                                         IdQuestion = Convert.ToInt64(dataRow["PREG_PREGUNTA_ID_BI"]),
+                                                                         FieldType = dataRow["PREG_TIPO_CAMPO_VC"].ToString(),
+                                                                         QuestionEvalute = dataRow["PREG_PREGUNTA_VC"].ToString(),
+                                                                         QuestionDetail = dataRow["PREG_PREGUNTA_DESCRIPCION_VC"].ToString(),
+                                                                         AnswerWithoutProcess = dataRow["RESPUESTAS"].ToString()
+                                                                     }
+                                                                     select question);
+                            return Response.Success(questionAswerResponse);
+
+                        }
+                        else 
+                        {
+                            Logger.Error("Message: {0} StoreProcedure.Error: {1}", Response.CommentMenssage("ModuleNotRegistred"), storeProcedure.Error);
+                            return Response.Error(storeProcedure.Error, "ModuleNotRegistred");
+                        }
                     }
                     else
                     {

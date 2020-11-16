@@ -10,6 +10,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Core.Entity
         public string Email { get; set; }
         public string Password { get; set; }
         public string Ci { get; set; }
+        public string CiExpedition { get; set; }
         public string NameComplete { get; set; }
         public string Gender { get; set; }
         public DateTime Birthdate { get; set; }

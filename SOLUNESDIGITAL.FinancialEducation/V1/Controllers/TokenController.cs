@@ -260,6 +260,30 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 }
                 #endregion
 
+                AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var credentialToken = authHeader.Parameter;
+                var responsetokenValidated = _tokenManager.GetPrincipalFromExpiredToken(credentialToken);
+
+                if (responsetokenValidated.Data == null)
+                {
+                    response.Data = null;
+                    response.Message = responsetokenValidated.Message;
+                    response.State = responsetokenValidated.State;
+                    return BadRequest(response);
+                }
+                var principal = (ClaimsPrincipal)responsetokenValidated.Data;
+                var claimList = principal.Claims.ToList();
+                var verifyEmail = claimList[2].Value;
+
+                if (!verifyEmail.Equals(revokeRequest.Email.Trim()))
+                {
+                    var validate = Models.Response.Error("ClientNotSession");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return BadRequest(response);
+                }
+
                 var token = revokeRequest.Token ?? Request.Cookies["refreshToken"];
 
                 string ipAddress = "";

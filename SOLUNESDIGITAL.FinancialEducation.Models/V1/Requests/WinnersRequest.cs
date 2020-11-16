@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
 {
-    public class WinnersdRequest : Token.TokenPublic
+    public class WinnersRequest : Token.TokenPublic
     {
     }
 }

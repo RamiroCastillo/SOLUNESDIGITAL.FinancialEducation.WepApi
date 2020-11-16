@@ -12,6 +12,9 @@ using SOLUNESDIGITAL.FinancialEducation.Models;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 using SOLUNESDIGITAL.Framework.Logs;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
 {
@@ -118,6 +121,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 {
                     Email = preRegistrationRequest.Email,
                     Ci = preRegistrationRequest.Ci,
+                    CiExpedition = preRegistrationRequest.CiExpedition,
                     Password = passwordEncrypted,
                     AcceptTerms = preRegistrationRequest.AcceptTerms,
                     VerificationTokenEmail = Framework.Common.Tools.RandomTokenString(),
@@ -144,8 +148,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     response.Data = new PreRegistrationResponse
                     {
                         Email = newClient.Email,
-                        Ci = newClient.Ci
-
+                        Ci = newClient.Ci,
+                        CiExpedition = newClient.CiExpedition
                     };
                     response.Message = validate.Message;
                     response.State = validate.State;
@@ -160,8 +164,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 response.Data = new PreRegistrationResponse
                 {
                     Email = newClient.Email,
-                    Ci = newClient.Ci
-                    
+                    Ci = newClient.Ci,
+                    CiExpedition = newClient.CiExpedition
                 };
                 response.Message = Models.Response.CommentMenssage("PreRegistredCompleted");
                 response.State = "000";
@@ -266,7 +270,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
 
                 response.Data = new VerifyEmailResponse
                 {
-                    TokenEmailVerify = verifyEmailRequest.TokenEmailVerify
+                    TokenEmailVerify = verifyEmailRequest.TokenEmailVerify,
+                    Verify = true
                 };
                 response.Message = Models.Response.CommentMenssage("VerifyEmailComplete");
                 response.State = "000";
@@ -526,7 +531,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
         [AllowAnonymous]
         [Route("GetWinners")]
         [HttpPost]
-        public IActionResult GetWinners([FromBody] WinnersdRequest winnersdRequest)
+        public IActionResult GetWinners([FromBody] WinnersRequest winnersdRequest)
         {
             Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(winnersdRequest));
             DateTime dateRequest = DateTime.Now;
@@ -583,7 +588,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 }
                 #endregion
 
-                var winnersResponse = _clientAnswer.GetWinners(_configuration.GetValue<int>("DetailScore:NumberOfWinners"), _scoreByQuestion);
+                var winnersResponse = _client.GetWinners();
                 if (winnersResponse.Data == null)
                 {
                     response.Data = null;
@@ -622,6 +627,106 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 };
                 _consumptionHistory.Insert(consumptionHistory);
                 Logger.Debug("Request: {0} Response: {1}", winnersdRequest, response);
+            }
+        }
+
+        [AllowAnonymous]
+        [Route("SendCertificate")]
+        [HttpPost]
+        public IActionResult SendCertificate([FromBody] SendCertificateRequest sendCertificateRequest)
+        {
+            Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(sendCertificateRequest));
+            DateTime dateRequest = DateTime.Now;
+            var response = new IResponse<SendCertificateResponse>();
+            string correlationId = string.Empty;
+            try
+            {
+                #region Authorization Usuario y Contraseña
+                if (string.IsNullOrEmpty(Request.Headers["Authorization"]))
+                {
+                    var validate = Models.Response.Error(null, "NotAuthenticated");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return Unauthorized(response);
+                }
+
+                AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(authHeader.Parameter)).Split(':');
+                correlationId = Request.Headers["Correlation-Id"].ToString();
+
+                Core.Entity.User user = new Core.Entity.User()
+                {
+                    Public = sendCertificateRequest.PublicToken,
+                    UserName = credentials[0],
+                    Password = credentials[1]
+                };
+                var userAuthenticate = _user.Authenticate(user);
+                if (userAuthenticate.Data == null)
+                {
+                    var validate = Models.Response.Error("NotAuthenticated");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return Unauthorized(response);
+                }
+                Core.Entity.UserPolicy userPolicy = new Core.Entity.UserPolicy()
+                {
+                    AppUserId = sendCertificateRequest.AppUserId,
+                    IdUser = ((Core.Entity.User)userAuthenticate.Data).Id
+                };
+                Core.Entity.Policy policy = new Core.Entity.Policy()
+                {
+                    Name = Request.Path.Value
+                };
+                var userPolicyAuthorize = _userPolicy.Authorize(userPolicy, policy);
+                if (userPolicyAuthorize.Data == null)
+                {
+                    var validate = Models.Response.Error("NotUnauthorized");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return Unauthorized(response);
+                }
+                #endregion
+
+                var newImage = Framework.Common.Tools.GetBase64Image(sendCertificateRequest.NameComplete,sendCertificateRequest.Ci, sendCertificateRequest.CiExpedition);
+
+                SendCertificateResponse responseImage = new SendCertificateResponse()
+                {
+                    pdfCertificate = newImage
+                };
+
+                response.Data = responseImage;
+                response.Message = Models.Response.CommentMenssage("Winners");
+                response.State = "000";
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Message: {0}; Exception: {1}", ex.Message, Framework.Common.SerializeJson.ToObject(ex));
+                response.Data = null;
+                response.Message = "Error General";
+                response.State = "099";
+                return BadRequest(response);
+            }
+            finally
+            {
+                DateTime dateResponse = DateTime.Now;
+                Core.Entity.ConsumptionHistory consumptionHistory = new Core.Entity.ConsumptionHistory
+                {
+                    ApiName = Request.Path.Value,
+                    Host = Dns.GetHostName() + ":" + Request.Host.Port,
+                    CorrelationId = correlationId,
+                    AppUserId = sendCertificateRequest.AppUserId,
+                    Request = Framework.Common.SerializeJson.ToObject(sendCertificateRequest),
+                    DateRequest = dateRequest,
+                    Response = Framework.Common.SerializeJson.ToObject(response),
+                    DateResponse = dateResponse,
+                    CodeResponse = response.State
+                };
+                _consumptionHistory.Insert(consumptionHistory);
+                Logger.Debug("Request: {0} Response: {1}", sendCertificateRequest, response);
             }
         }
     }
