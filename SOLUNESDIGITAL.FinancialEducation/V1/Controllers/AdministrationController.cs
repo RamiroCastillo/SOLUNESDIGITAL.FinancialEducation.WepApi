@@ -12,9 +12,7 @@ using SOLUNESDIGITAL.FinancialEducation.Models;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 using SOLUNESDIGITAL.Framework.Logs;
-using System.Drawing;
 using System.IO;
-using System.Drawing.Imaging;
 
 namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
 {
@@ -127,7 +125,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     VerificationTokenEmail = Framework.Common.Tools.RandomTokenString(),
                     CreationUser = preRegistrationRequest.AppUserId
                 };
-
                 var clientCreateAcountInsert = _client.InsertIfNotexist(client);
                 if (clientCreateAcountInsert.Data == null) 
                 {
@@ -149,7 +146,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     {
                         Email = newClient.Email,
                         Ci = newClient.Ci,
-                        CiExpedition = newClient.CiExpedition
                     };
                     response.Message = validate.Message;
                     response.State = validate.State;
@@ -165,7 +161,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 {
                     Email = newClient.Email,
                     Ci = newClient.Ci,
-                    CiExpedition = newClient.CiExpedition
                 };
                 response.Message = Models.Response.CommentMenssage("PreRegistredCompleted");
                 response.State = "000";
@@ -633,7 +628,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
         [AllowAnonymous]
         [Route("SendCertificate")]
         [HttpPost]
-        public IActionResult SendCertificate([FromBody] SendCertificateRequest sendCertificateRequest)
+        public IActionResult SendCertificate([FromForm]  SendCertificateRequest sendCertificateRequest)
         {
             Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(sendCertificateRequest));
             DateTime dateRequest = DateTime.Now;
@@ -689,12 +684,27 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
                 #endregion
+                string pdf = "";
+                if (sendCertificateRequest.File.Length > 0)
+                {
+                    MemoryStream stream = new MemoryStream();
+                    sendCertificateRequest.File.CopyTo(stream);
+                    pdf = Framework.Common.Tools.GetBase64Image(sendCertificateRequest.NameComplete, sendCertificateRequest.Evento, stream);
+                }
+                else 
+                {
+                    response.Data = null;
+                    response.Message = "Error";
+                    response.State = "20";
+                    return BadRequest(response);
+                }
 
-                var newImage = Framework.Common.Tools.GetBase64Image(sendCertificateRequest.NameComplete,sendCertificateRequest.Ci, sendCertificateRequest.CiExpedition);
+
+
 
                 SendCertificateResponse responseImage = new SendCertificateResponse()
                 {
-                    pdfCertificate = newImage
+                    pdfCertificate = pdf
                 };
 
                 response.Data = responseImage;

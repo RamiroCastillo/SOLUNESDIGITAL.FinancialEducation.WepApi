@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -13,14 +14,17 @@ namespace SOLUNESDIGITAL.FinancialEducation.Extensions
 {
     public static class ServiceExtensions
     {
+        private const SameSiteMode Unspecified = (SameSiteMode)(-1);
         public static void ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                    builder => builder
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowCredentials());
             });
         }
 
@@ -53,5 +57,54 @@ namespace SOLUNESDIGITAL.FinancialEducation.Extensions
                 };
             });
         }
+
+        /*public static IServiceCollection ConfigureNonBreakingSameSiteCookies(this IServiceCollection services)
+        {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = Unspecified;
+                options.OnAppendCookie = cookieContext =>
+                   CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                options.OnDeleteCookie = cookieContext =>
+                   CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            });
+
+            return services;
+        }
+
+        private static void CheckSameSite(HttpContext httpContext, CookieOptions options)
+        {
+            if (options.SameSite == SameSiteMode.None)
+            {
+                var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+
+                if (DisallowsSameSiteNone(userAgent))
+                {
+                    options.SameSite = Unspecified;
+                }
+            }
+        }
+
+        private static bool DisallowsSameSiteNone(string userAgent)
+        {
+            if (userAgent.Contains("CPU iPhone OS 12")
+               || userAgent.Contains("iPad; CPU OS 12"))
+            {
+                return true;
+            }
+
+            if (userAgent.Contains("Safari")
+               && userAgent.Contains("Macintosh; Intel Mac OS X 10_14")
+               && userAgent.Contains("Version/"))
+            {
+                return true;
+            }
+
+            if (userAgent.Contains("Chrome/5") || userAgent.Contains("Chrome/6"))
+            {
+                return true;
+            }
+            return false;
+        }*/
     }
 }

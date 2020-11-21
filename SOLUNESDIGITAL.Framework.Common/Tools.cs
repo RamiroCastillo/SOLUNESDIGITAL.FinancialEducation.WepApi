@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using System.Drawing;
 
 namespace SOLUNESDIGITAL.Framework.Common
 {
@@ -21,50 +20,47 @@ namespace SOLUNESDIGITAL.Framework.Common
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
-        public static string GetBase64Image(string nameComplete, string ci, string ciExpedition) 
+        public static string GetBase64Image(string nameComplete, string evento, MemoryStream memoryStreamCargado)
         {
-            Image bitmap = Image.FromFile(string.Format(@"{0}/Resources/certificado.jpg", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
-            Graphics graphicsImage = Graphics.FromImage(bitmap);
-
-            StringFormat stringFormatnameComplete = new StringFormat();
-            stringFormatnameComplete.Alignment = StringAlignment.Center;
-            stringFormatnameComplete.LineAlignment = StringAlignment.Center;
-
-            StringFormat stringFormatCi = new StringFormat();
-            stringFormatCi.Alignment = StringAlignment.Center;
-            stringFormatCi.LineAlignment = StringAlignment.Center;
-
-            Color stringColorNameComplete = System.Drawing.ColorTranslator.FromHtml("#000000");
-            Color stringColorCi = System.Drawing.ColorTranslator.FromHtml("#000000");
-
-            graphicsImage.DrawString(nameComplete, new Font("arial", 15, FontStyle.Bold), new SolidBrush(stringColorNameComplete), new Point(300, 245), stringFormatnameComplete);
-
-            graphicsImage.DrawString(string.Format("{0} {1}", ci, ciExpedition), new Font("arial", 15, FontStyle.Bold), new SolidBrush(stringColorCi), new Point(300, 350), stringFormatCi);
-
             string newImage = "";
-            var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Jpeg);
-            newImage = System.Convert.ToBase64String(ms.ToArray());
-            return newImage;
-
-            /*PdfDocument document = new PdfDocument();
-
-            PdfImage image = PdfImage.FromStream(ms);
-            PdfPage page = page = document.Pages.Add();
-            Syncfusion.Drawing.PointF puntoIncial = new Syncfusion.Drawing.PointF(0,0);
-
-            page.Graphics.DrawImage(image, puntoIncial);
-            ms.Dispose();
-
+            PdfStringFormat stringFormatText= new PdfStringFormat();
+            PdfDocument document = new PdfDocument();
             MemoryStream stream = new MemoryStream();
-
-            document.Save(stream);
-            //Set the position as '0'.
-            stream.Position = 0;
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 25);
 
             try
-            {
-                var base64 = "data:application/pdf;base64," + System.Convert.ToBase64String(document);
+            {   /*Cargado de imagen*/
+
+                Image imageRequest = Image.FromStream(memoryStreamCargado);
+
+                Image bitmap = Image.FromFile(string.Format(@"{0}/Resources/certificado.jpeg", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
+
+                stringFormatText.Alignment = PdfTextAlignment.Center;
+                stringFormatText.LineAlignment = (PdfVerticalAlignment)PdfTextAlignment.Center;
+
+
+                var ms = new MemoryStream();
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                newImage = System.Convert.ToBase64String(ms.ToArray());
+
+                document.PageSettings.Orientation = PdfPageOrientation.Landscape;
+                document.PageSettings.Size = PdfPageSize.Letter;
+                document.PageSettings.Margins.All = 0;
+//                PdfImage image = PdfImage.FromStream(ms);
+                PdfImage image = PdfImage.FromStream(memoryStreamCargado);
+                PdfPage page = document.Pages.Add();
+                page.Graphics.DrawImage(image, 0, 0, document.PageSettings.Width, document.PageSettings.Height);
+
+                page.Graphics.DrawString(nameComplete, font, PdfBrushes.Black, (bitmap.Width / 2), (bitmap.Height / 2), stringFormatText);
+                page.Graphics.DrawString(evento, font, PdfBrushes.Black, (bitmap.Width / 2), (bitmap.Height / 2) + 60, stringFormatText);
+                ms.Dispose();
+
+
+                document.Save(stream);
+
+                byte[] docBytes = stream.ToArray();
+                stream.Position = 0;
+                var base64 = "data:application/pdf;base64," + System.Convert.ToBase64String(docBytes);
                 document.Close();
                 return base64;
             }
@@ -72,7 +68,7 @@ namespace SOLUNESDIGITAL.Framework.Common
             {
                 document.Close();
                 throw new Exception(ex.Message);
-            }*/
+            }
         }
     }
 }

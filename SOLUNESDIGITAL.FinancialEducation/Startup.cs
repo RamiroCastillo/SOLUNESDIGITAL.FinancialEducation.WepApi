@@ -145,6 +145,7 @@ namespace SOLUNESDIGITAL.FinancialEducation
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureJWT(Configuration);
+            //services.ConfigureNonBreakingSameSiteCookies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -154,7 +155,7 @@ namespace SOLUNESDIGITAL.FinancialEducation
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Configuration.GetValue<string>("LicencePdf"));
             app.UseHttpsRedirection();
             
             app.UseStaticFiles();
@@ -167,6 +168,8 @@ namespace SOLUNESDIGITAL.FinancialEducation
             });
 
             app.UseRouting();
+
+            //app.UseCookiePolicy();
 
             app.UseAuthentication();
 

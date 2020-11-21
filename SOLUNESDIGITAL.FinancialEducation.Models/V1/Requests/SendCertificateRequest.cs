@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -10,8 +12,10 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
         [Required]
         public string NameComplete { get; set; }
         [Required]
-        public string Ci { get; set; }
+        public string Evento { get; set; }
+        public string Base64Image { get; set; }
+        public IFormFile File { get; set; }
         [Required]
-        public string CiExpedition { get; set; }
+        public string Format { get; set; }
     }
 }

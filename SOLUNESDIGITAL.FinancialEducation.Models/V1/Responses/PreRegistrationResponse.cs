@@ -8,6 +8,5 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
     {
         public string Email { get; set; }
         public string Ci { get; set; }
-        public string CiExpedition { get; set; }
     }
 }

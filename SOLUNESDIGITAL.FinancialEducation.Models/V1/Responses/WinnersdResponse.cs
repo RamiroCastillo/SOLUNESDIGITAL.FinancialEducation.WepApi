@@ -18,7 +18,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
             public int Position { get; set; }
             public string Email { get; set; }
             public string Ci { get; set; }
-            public string CiExpedition { get; set; }
             public string NameComplete { get; set; }
             public int Age { get; set; }
             public string Department { get; set; }

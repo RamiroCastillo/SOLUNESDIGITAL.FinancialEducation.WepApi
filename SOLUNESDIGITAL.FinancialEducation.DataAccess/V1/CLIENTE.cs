@@ -480,7 +480,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                                         Position = Convert.ToInt32(dataRow["POSITION"]),
                                                         Email = dataRow["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
                                                         Ci = dataRow["CLIE_CI_VC"].ToString(),
-                                                        CiExpedition = dataRow["CLIE_CI_EXPEDICION_VC"].ToString(),
                                                         NameComplete = dataRow["CLIE_NOMBRE_COMPLETO_VC"].ToString(),
                                                         Age = Convert.ToInt32(dataRow["CLIE_EDAD_IN"]),
                                                         Department = dataRow["CLIE_DEPARTAMENTO_VC"].ToString(),

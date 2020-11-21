@@ -10,7 +10,7 @@
     <None Update="Resources\Validate.api">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\certificado.jpg">
+    <None Update="Resources\certificado.jpeg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 
