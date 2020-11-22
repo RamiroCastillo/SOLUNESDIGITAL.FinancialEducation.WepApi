@@ -10,10 +10,9 @@
     <None Update="Resources\Validate.api">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\certificado.jpeg">
+    <None Update="Resources\certificado.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +35,7 @@
     <ProjectReference Include="..\SOLUNESDIGITAL.FinancialEducation.DataAccess\SOLUNESDIGITAL.FinancialEducation.DataAccess.csproj" />
     <ProjectReference Include="..\SOLUNESDIGITAL.FinancialEducation.Models\SOLUNESDIGITAL.FinancialEducation.Models.csproj" />
     <ProjectReference Include="..\SOLUNESDIGITAL.Framework.Logs\SOLUNESDIGITAL.Framework.Logs.csproj" />
+    <ProjectReference Include="..\SOLUNESDIGITAL.Tools.Images\SOLUNESDIGITAL.Tools.Images.csproj" />
   </ItemGroup>
 
 

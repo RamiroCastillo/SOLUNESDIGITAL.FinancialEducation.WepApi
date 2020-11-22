@@ -40,14 +40,22 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                     {
                         if (!string.IsNullOrEmpty(dataTable.Rows[0]["@@IDENTITY"].ToString()))
                         {
-                            if (Convert.ToInt32(dataTable.Rows[0]["@@IDENTITY"]) > 0)
+                            if (!dataTable.Rows[0]["@@IDENTITY"].Equals("01"))
                             {
-                                return Response.Success(Convert.ToInt64(dataTable.Rows[0]["@@IDENTITY"].ToString()));
+                                if (Convert.ToInt32(dataTable.Rows[0]["@@IDENTITY"]) > 0)
+                                {
+                                    return Response.Success(Convert.ToInt64(dataTable.Rows[0]["@@IDENTITY"].ToString()));
+                                }
+                                else
+                                {
+                                    Logger.Error("Message: {0}; DataTable: {1}", "", SerializeJson.ToObject(dataTable));
+                                    return Response.Error("ClientFinallyModule");
+                                }
                             }
                             else
                             {
                                 Logger.Error("Message: {0}; DataTable: {1}", "", SerializeJson.ToObject(dataTable));
-                                return Response.Error("ClientFinallyModule");
+                                return Response.Error("CouponAlreadyRegistered");
                             }
                         }
                         else

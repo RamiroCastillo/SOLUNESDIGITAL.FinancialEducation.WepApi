@@ -10,12 +10,16 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
     public class SendCertificateRequest : Token.TokenPublic
     {
         [Required]
-        public string NameComplete { get; set; }
-        [Required]
-        public string Evento { get; set; }
-        public string Base64Image { get; set; }
-        public IFormFile File { get; set; }
-        [Required]
-        public string Format { get; set; }
+        public List<CertificateParameter> CertificateParameters { get; set; }
+        public class CertificateParameter 
+        {
+            public string Label { get; set; }
+            public string Value { get; set; }
+            public float FontSizeLabel { get; set; }
+            public float FontSize { get; set; }
+            public float VerticalTextDirection { get; set; }
+
+        }
+
     }
 }

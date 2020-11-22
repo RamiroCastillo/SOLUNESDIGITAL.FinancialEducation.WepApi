@@ -12,6 +12,7 @@ using SOLUNESDIGITAL.FinancialEducation.Models;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests;
 using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 using SOLUNESDIGITAL.Framework.Logs;
+using SOLUNESDIGITAL.Tools.Images;
 using System.IO;
 
 namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
@@ -104,6 +105,15 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
                 #endregion
+
+                if (!Framework.Common.Tools.WellWrittenEmail(preRegistrationRequest.Email)) 
+                {
+                    var validate = Models.Response.Error("InvalidEmail");
+                    response.Data = null;
+                    response.Message = validate.Message;
+                    response.State = validate.State;
+                    return BadRequest(response);
+                }
 
                 if (preRegistrationRequest.Password != preRegistrationRequest.ConfirmPassword) 
                 {
@@ -628,7 +638,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
         [AllowAnonymous]
         [Route("SendCertificate")]
         [HttpPost]
-        public IActionResult SendCertificate([FromForm]  SendCertificateRequest sendCertificateRequest)
+        public IActionResult SendCertificate([FromBody]  SendCertificateRequest sendCertificateRequest)
         {
             Logger.Debug("Request: {0}", Framework.Common.SerializeJson.ToObject(sendCertificateRequest));
             DateTime dateRequest = DateTime.Now;
@@ -684,23 +694,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
                 #endregion
-                string pdf = "";
-                if (sendCertificateRequest.File.Length > 0)
-                {
-                    MemoryStream stream = new MemoryStream();
-                    sendCertificateRequest.File.CopyTo(stream);
-                    pdf = Framework.Common.Tools.GetBase64Image(sendCertificateRequest.NameComplete, sendCertificateRequest.Evento, stream);
-                }
-                else 
-                {
-                    response.Data = null;
-                    response.Message = "Error";
-                    response.State = "20";
-                    return BadRequest(response);
-                }
-
-
-
+                var pdf = ToolImage.GetBase64Image(sendCertificateRequest.CertificateParameters);
 
                 SendCertificateResponse responseImage = new SendCertificateResponse()
                 {

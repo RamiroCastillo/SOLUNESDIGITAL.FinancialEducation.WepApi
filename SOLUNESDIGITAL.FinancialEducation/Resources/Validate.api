@@ -115,6 +115,14 @@
     "LongName": "El cliente ya finalizó este módulo y no puede volver a realizarlo, verifique el modulo que esta consultando.",
     "Code": "016"
   },
+  "CouponAlreadyRegistered": {
+    "LongName": "Se generó un error al registrar su respuesta el cupon generado ya se encuentra registrado vuelva a guardar su respuesta",
+    "Code": "017"
+  },
+  "InvalidEmail": {
+    "LongName": "El correo que intento registrar no es valido.",
+    "Code": "018"
+  },
   "Exception": {
     "LongName": "Excepción",
     "Code": "099"
