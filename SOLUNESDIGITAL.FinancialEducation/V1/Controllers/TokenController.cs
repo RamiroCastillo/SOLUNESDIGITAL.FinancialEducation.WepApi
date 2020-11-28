@@ -156,7 +156,9 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
-                    Expires = DateTime.UtcNow.AddDays(_configuration.GetValue<double>("JwtSettings:TimeExpirationTokenRefresh"))
+                    Expires = DateTime.UtcNow.AddDays(_configuration.GetValue<double>("JwtSettings:TimeExpirationTokenRefresh")),
+                    SameSite = SameSiteMode.None,
+                    Secure = true,
                 };
                 Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
 
@@ -169,7 +171,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     Token = accessToken,
                     RefreshToken = newRefreshToken.Token
                 };
-                response.Message = Models.Response.CommentMenssage("Completed");
+                response.Message = Models.Response.CommentMenssage("TokenRefreshSuccessful");
                 response.State = "000";
                 return Ok(response);
             }

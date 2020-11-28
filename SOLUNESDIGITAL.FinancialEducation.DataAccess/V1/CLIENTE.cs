@@ -420,6 +420,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                 Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
                                 NameComplete = dataTable.Rows[0]["CLIE_NOMBRE_COMPLETO_VC"].ToString(),
                                 Gender = dataTable.Rows[0]["CLIE_GENERO_VC"].ToString(),
+                                Birthdate = Convert.ToDateTime(dataTable.Rows[0]["CLIE_FECHA_NACIMIENTO_DT"]),
                                 Age = Convert.ToInt32(dataTable.Rows[0]["CLIE_EDAD_IN"]),
                                 Department = dataTable.Rows[0]["CLIE_DEPARTAMENTO_VC"].ToString(),
                                 City = dataTable.Rows[0]["CLIE_CIUDAD_VC"].ToString(),
@@ -428,6 +429,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                 Phone = dataTable.Rows[0]["CLIE_NUMERO_FIJO_VC"].ToString(),
                                 EducationLevel = dataTable.Rows[0]["CLIE_NIVEL_EDUCACION_VC"].ToString(),
                                 Disability = Convert.ToBoolean(dataTable.Rows[0]["CLIE_DISCAPACIDAD_BT"]),
+                                ReferenceName = dataTable.Rows[0]["CLIE_NOMBRE_REFERENCIA_VC"].ToString(),
+                                ReferenceCellphone = dataTable.Rows[0]["CLIE_CELULAR_REFERENCIA_VC"].ToString(),
                                 Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 1 ? "User" : "Admin",
                                 CompleteRegister = Convert.ToBoolean(dataTable.Rows[0]["CLIE_REGISTRO_COMPLETO_BT"]),
                                 CurrentModule = Convert.ToInt32(dataTable.Rows[0]["MODULO_ACTUAL"]),
@@ -481,12 +484,19 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                                         Email = dataRow["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
                                                         Ci = dataRow["CLIE_CI_VC"].ToString(),
                                                         NameComplete = dataRow["CLIE_NOMBRE_COMPLETO_VC"].ToString(),
+                                                        Gender = dataRow["CLIE_GENERO_VC"].ToString(),
+                                                        Birthdate = Convert.ToDateTime(dataRow["CLIE_FECHA_NACIMIENTO_DT"]),
                                                         Age = Convert.ToInt32(dataRow["CLIE_EDAD_IN"]),
                                                         Department = dataRow["CLIE_DEPARTAMENTO_VC"].ToString(),
                                                         City = dataRow["CLIE_CIUDAD_VC"].ToString(),
                                                         Address = dataRow["CLIE_DIRECCION_VC"].ToString(),
                                                         CellPhone = dataRow["CLIE_NUMERO_CELULAR_VC"].ToString(),
+                                                        Phone = Convert.ToString(dataRow["CLIE_NUMERO_FIJO_VC"]),
                                                         EducationLevel = dataRow["CLIE_NIVEL_EDUCACION_VC"].ToString(),
+                                                        Disability = Convert.ToBoolean(dataRow["CLIE_DISCAPACIDAD_BT"]),
+                                                        ReferenceName = Convert.ToString(dataRow["CLIE_NOMBRE_REFERENCIA_VC"]),
+                                                        ReferenceCellphone = Convert.ToString(dataRow["CLIE_CELULAR_REFERENCIA_VC"]),
+                                                        Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 1 ? "User" : "Admin",
                                                         CompleteRegister = Convert.ToBoolean(dataRow["CLIE_REGISTRO_COMPLETO_BT"]),
                                                         CurrentModule = Convert.ToInt32(dataRow["MODULO_ACTUAL"]),
                                                         NumberModuleFinished = Convert.ToInt32(dataRow["NUMERO_MODULOS_TERMINADOS"]),
@@ -511,8 +521,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                         }
                         else
                         {
-                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ErrorResetPassword"), SerializeJson.ToObject(dataTable));
-                            return Response.Error(null, "ErrorResetPassword");
+                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ErrorGetWinners"), SerializeJson.ToObject(dataTable));
+                            return Response.Error(null, "ErrorGetWinners");
                         }
                     }
                     else

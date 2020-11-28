@@ -702,7 +702,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 };
 
                 response.Data = responseImage;
-                response.Message = Models.Response.CommentMenssage("Winners");
+                response.Message = Models.Response.CommentMenssage("CertificateCreatedSuccesfuly");
                 response.State = "000";
                 return Ok(response);
             }

@@ -20,13 +20,25 @@ namespace SOLUNESDIGITAL.FinancialEducation.Extensions
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .SetIsOriginAllowed(origin => true)
-                    .AllowCredentials());
+                    builder =>
+                    {
+                        options.AddPolicy("CorsPolicy",
+                            builder => builder
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .SetIsOriginAllowed(origin => true)
+                                .AllowCredentials());
+                    });
             });
         }
+        /* options.AddPolicy("CorsPolicy",
+                    builder => 
+                    {
+                        builder.WithOrigins("http://localhost:4200", "http://localhost:5500", "http://127.0.0.1:4200", "http://127.0.0.1:5500")
+                        .AllowCredentials()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });*/
 
         public static void ConfigureIISIntegration(this IServiceCollection services)
         {

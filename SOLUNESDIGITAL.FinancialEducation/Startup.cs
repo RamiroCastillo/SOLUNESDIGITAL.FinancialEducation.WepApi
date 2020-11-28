@@ -74,12 +74,18 @@ namespace SOLUNESDIGITAL.FinancialEducation
 
             services.AddTransient<ITokenManger, TokenManger>(f => new TokenManger(minutesExpiratioTime, validIssuer, validAudience));
 
-
-            string host = Configuration.GetValue<string>("Connectors_Email:Host");
+            /*string host = Configuration.GetValue<string>("Connectors_Email:Host");
             string port = Configuration.GetValue<string>("Connectors_Email:Port");
             string from = Configuration.GetValue<string>("Connectors_Email:From");
             string smtpUser = Configuration.GetValue<string>("Connectors_Email:User");
-            string smtpPassword = Configuration.GetValue<string>("Connectors_Email:Password");
+            string smtpPassword = Configuration.GetValue<string>("Connectors_Email:Password");*/
+
+            string host = Environment.GetEnvironmentVariable("EMAILHOST");
+            string port = Environment.GetEnvironmentVariable("EMAILPORT");
+            string from = Environment.GetEnvironmentVariable("EMAILFROM");
+            string smtpUser = Environment.GetEnvironmentVariable("EMAILUSER");
+            string smtpPassword = Environment.GetEnvironmentVariable("EMAILPASSWORD");
+
             bool flagEnableUserPassword = Configuration.GetValue<bool>("Connectors_Email:FlagEnableUserPassword");
             string message = Configuration.GetValue<string>("Connectors_Email:Message");
 
@@ -143,6 +149,7 @@ namespace SOLUNESDIGITAL.FinancialEducation
             #endregion
             services.AddControllers();
             services.ConfigureCors();
+            //services.AddCors();
             services.ConfigureIISIntegration();
             services.ConfigureJWT(Configuration);
             //services.ConfigureNonBreakingSameSiteCookies();

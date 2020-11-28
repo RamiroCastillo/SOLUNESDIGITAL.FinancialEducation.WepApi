@@ -19,12 +19,19 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
             public string Email { get; set; }
             public string Ci { get; set; }
             public string NameComplete { get; set; }
+            public string Gender { get; set; }
+            public DateTime Birthdate { get; set; }
             public int Age { get; set; }
             public string Department { get; set; }
             public string City { get; set; }
             public string Address { get; set; }
             public string CellPhone { get; set; }
+            public string Phone { get; set; }
             public string EducationLevel { get; set; }
+            public bool Disability { get; set; }
+            public string ReferenceName { get; set; }
+            public string ReferenceCellphone { get; set; }
+            public string Role { get; set; }
             public bool CompleteRegister { get; set; }
             public int CurrentModule { get; set; }
             public int NumberModuleFinished { get; set; }

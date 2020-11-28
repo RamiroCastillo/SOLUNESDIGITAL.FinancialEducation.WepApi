@@ -11,6 +11,10 @@
     "LongName": "Pre registro exitoso, revisar el correo para validar la creación de la cuenta.",
     "Code": "000"
   },
+  "CertificateCreatedSuccesfuly": {
+    "LongName": "La creación del certificado de realizó de manera exitosa.",
+    "Code": "000"
+  },
   "VerifyEmailComplete": {
     "LongName": "Verificación de correo completada, ya puede iniciar sesión.",
     "Code": "000"
@@ -32,7 +36,7 @@
     "Code": "000"
   },
   "Winners": {
-    "LongName": "Obtención de ganadores existoso.",
+    "LongName": "Obtención de ganadores exitoso.",
     "Code": "000"
   },
   "TokenRevokeSuccessful": {
@@ -64,7 +68,7 @@
     "Code": "003"
   },
   "PasswordNotConfirm": {
-    "LongName": "La contraseña de verificacion no coincide.",
+    "LongName": "La contraseña de verificación no coincide.",
     "Code": "004"
   },
   "UserNotAgeApropiate": {
@@ -72,7 +76,7 @@
     "Code": "005"
   },
   "ErrorVerifyemail": {
-    "LongName": "Error al verificar el correo electronico",
+    "LongName": "Error al verificar el correo electrónico.",
     "Code": "006"
   },
   "AnswerRegistred": {
@@ -88,7 +92,7 @@
     "Code": "009"
   },
   "ErrorResetPassword": {
-    "LongName": "Error al restablecer la contraseña por favor verifique el correo y que el token sean correctos.",
+    "LongName": "Error al restablecer la contraseña por favor verifique que el correo y token sea correctos.",
     "Code": "010"
   },
   "ModuleNotRegistred": {
@@ -122,6 +126,10 @@
   "InvalidEmail": {
     "LongName": "El correo que intento registrar no es valido.",
     "Code": "018"
+  },
+  "ErrorGetWinners": {
+    "LongName": "Error al generar los ganadores.",
+    "Code": "019"
   },
   "Exception": {
     "LongName": "Excepción",
