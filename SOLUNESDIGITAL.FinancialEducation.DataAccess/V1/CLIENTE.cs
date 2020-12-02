@@ -71,8 +71,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                     }
                     else
                     {
-                        Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("NotUnauthorized"), SerializeJson.ToObject(dataTable));
-                        return Response.Error(dataTable, "NotLogin");
+                        Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredCi"), SerializeJson.ToObject(dataTable));
+                        return Response.Error(dataTable, "AlreadyRegisteredCi");
                     }
                 }
                 else
