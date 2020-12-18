@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -87,7 +88,8 @@ namespace SOLUNESDIGITAL.FinancialEducation
             string smtpPassword = Environment.GetEnvironmentVariable("EMAILPASSWORD");
 
             bool flagEnableUserPassword = Configuration.GetValue<bool>("Connectors_Email:FlagEnableUserPassword");
-            string message = Configuration.GetValue<string>("Connectors_Email:Message");
+            //string message = Configuration.GetValue<string>("Connectors_Email:Message");
+            string message = File.ReadAllText(string.Format(@"{0}/Resources/Template/TemplateMail.html", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
 
             services.AddSingleton<IEmailManager, EmailManager>(f => new EmailManager(host, port, from, smtpUser, smtpPassword, flagEnableUserPassword, message));
 

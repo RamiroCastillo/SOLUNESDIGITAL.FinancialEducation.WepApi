@@ -17,6 +17,8 @@ using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 using SOLUNESDIGITAL.Framework.Logs;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using SOLUNESDIGITAL.FinancialEducation.Connector.Email.Managers;
+using System.Globalization;
 
 namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
 {
@@ -38,8 +40,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
         private readonly double _scoreByQuestion;
         private readonly IClienAnswer _clientAnswer;
         private readonly IClientModule _clientModule;
-
-        public ClientServiceController(IConfiguration configuration, ILogger logger, IUser user, IUserPolicy userPolicy, IClient client, IConsumptionHistory consumptionHistory, ITokenManger tokenManager, IRefreshToken refreshToken, IModule module, IClienAnswer clientAnswer, IClientModule clientModule)
+        private readonly IEmailManager _emailmanager;
+        public ClientServiceController(IConfiguration configuration, ILogger logger, IUser user, IUserPolicy userPolicy, IClient client, IConsumptionHistory consumptionHistory, ITokenManger tokenManager, IRefreshToken refreshToken, IModule module, IClienAnswer clientAnswer, IClientModule clientModule, IEmailManager emailManager)
         {
             _configuration = configuration;
             _logger = logger;
@@ -54,6 +56,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
             _scoreByQuestion = configuration.GetValue<double>("DetailScore:Score") / ((configuration.GetValue<double>("DetailScore:Modules")) + 1);
             _clientAnswer = clientAnswer;
             _clientModule = clientModule;
+            _emailmanager = emailManager;
         }
 
         [Route("RegistrationComplete")]
@@ -410,8 +413,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return BadRequest(response);
                 }
 
-                var moduleClient = _clientModule.InsertClientModuleAnswers(answersRequest.Email,answersRequest.ModuleNumber, answersRequest.AppUserId);
-                
+                var moduleClient = _clientModule.InsertClientModuleAnswers(answersRequest.Email, answersRequest.ModuleNumber, answersRequest.AppUserId);
+
                 if (moduleClient.Data == null)
                 {
                     response.Data = null;
@@ -419,6 +422,15 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     response.State = moduleClient.State;
                     return BadRequest(response);
                 }
+
+                var moduleData = (Core.Entity.Coupon)moduleClient.Data;
+                var contestDate = _configuration.GetValue<string>("ContestDate");
+                var separateDate = contestDate.Split("/");
+                DateTime contestDateFormated = new DateTime(Convert.ToInt32(separateDate[2]), Convert.ToInt32(separateDate[1]), Convert.ToInt32(separateDate[0]));
+                string dateInText = String.Format(new CultureInfo("es-BO"), "{0:D}", contestDateFormated);
+                var messageCoupon = _configuration.GetValue<string>("Connectors_Email:MessageCoupon");
+                _emailmanager.SendEmail(claimList[2].Value, "Finalización de módulo", messageCoupon, messageCoupon, "¡FELICIDADES!", Request.Headers["origin"], "", "", moduleData.CouponNumber, moduleData.CouponRegistred, dateInText);
+
 
                 AnswersResponse questionAswerResponse = new AnswersResponse()
                 {

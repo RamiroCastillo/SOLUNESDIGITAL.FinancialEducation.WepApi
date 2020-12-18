@@ -17,7 +17,7 @@ namespace SOLUNESDIGITAL.Tools.Images
             PdfDocument document = new PdfDocument();
             try
             {
-                Image bitmap = Image.FromFile(string.Format(@"{0}/Resources/certificado.jpg", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
+                Image bitmap = Image.FromFile(string.Format(@"{0}/Resources/certificado.png", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
 
                 stringFormatText.Alignment = PdfTextAlignment.Center;
                 stringFormatText.LineAlignment = (PdfVerticalAlignment)PdfTextAlignment.Center;
@@ -42,7 +42,7 @@ namespace SOLUNESDIGITAL.Tools.Images
                         if ((!string.IsNullOrEmpty(item.Label)) && item.FontSize > 0)
                         {
                             PdfFont fontLabel = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSizeLabel);
-                            page.Graphics.DrawString(item.Label, fontLabel, PdfBrushes.Black, (document.PageSettings.Width / 2), (item.VerticalTextDirection - ( fontSizeSeparate * 2) ), stringFormatText);
+                            page.Graphics.DrawString(item.Label, fontLabel, PdfBrushes.Black, item.HorizontalTextDirection, (item.VerticalTextDirection - ( fontSizeSeparate * 2) ), stringFormatText);
                         }
                         firstLabel = false;
                     }
@@ -51,11 +51,11 @@ namespace SOLUNESDIGITAL.Tools.Images
                         if ((!string.IsNullOrEmpty(item.Label)) && item.FontSize > 0)
                         {
                             PdfFont fontLabel = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSizeLabel);
-                            page.Graphics.DrawString(item.Label, fontLabel, PdfBrushes.Black, (document.PageSettings.Width / 2), (item.VerticalTextDirection - fontSizeSeparate), stringFormatText);
+                            page.Graphics.DrawString(item.Label, fontLabel, PdfBrushes.Black, item.HorizontalTextDirection, (item.VerticalTextDirection - fontSizeSeparate), stringFormatText);
                         }
                     }
                     PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSize);
-                    page.Graphics.DrawString(item.Value, font, PdfBrushes.Black, (document.PageSettings.Width / 2), item.VerticalTextDirection, stringFormatText);
+                    page.Graphics.DrawString(item.Value, font, PdfBrushes.Red, item.HorizontalTextDirection, item.VerticalTextDirection, stringFormatText);
                 }
                 memoryStreamImage.Dispose();
 

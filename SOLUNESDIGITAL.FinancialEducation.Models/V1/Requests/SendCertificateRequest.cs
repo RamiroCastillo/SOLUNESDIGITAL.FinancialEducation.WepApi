@@ -18,6 +18,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
             public float FontSizeLabel { get; set; }
             public float FontSize { get; set; }
             public float VerticalTextDirection { get; set; }
+            public float HorizontalTextDirection { get; set; }
 
         }
 

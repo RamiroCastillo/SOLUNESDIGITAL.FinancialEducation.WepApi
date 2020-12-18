@@ -38,36 +38,40 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 {
                     if (dataTable.Rows.Count > 0)
                     {
-                        if (!string.IsNullOrEmpty(dataTable.Rows[0]["@@IDENTITY"].ToString()))
+                        if (!dataTable.Rows[0]["RESULTADO"].Equals("03"))
                         {
-                            if (!dataTable.Rows[0]["@@IDENTITY"].Equals("01"))
+                            if (!dataTable.Rows[0]["RESULTADO"].Equals("02"))
                             {
-                                if (Convert.ToInt32(dataTable.Rows[0]["@@IDENTITY"]) > 0)
+                                if (!dataTable.Rows[0]["RESULTADO"].Equals("01"))
                                 {
-                                    return Response.Success(Convert.ToInt64(dataTable.Rows[0]["@@IDENTITY"].ToString()));
+                                    return Response.Success(new Core.Entity.Coupon 
+                                    {
+                                        CouponRegistred = dataTable.Rows[0]["CLMO_CUPON_VC"].ToString(),
+                                        CouponNumber = dataTable.Rows[0]["MODU_NUMERO_MODULO_IN"].ToString()
+                                    });
                                 }
                                 else
                                 {
                                     Logger.Error("Message: {0}; DataTable: {1}", "", SerializeJson.ToObject(dataTable));
-                                    return Response.Error("ClientFinallyModule");
+                                    return Response.Error("CouponAlreadyRegistered");
                                 }
                             }
                             else
                             {
                                 Logger.Error("Message: {0}; DataTable: {1}", "", SerializeJson.ToObject(dataTable));
-                                return Response.Error("CouponAlreadyRegistered");
+                                return Response.Error("ClientFinallyModule");
                             }
                         }
                         else
                         {
                             Logger.Error("Message: {0}; DataTable: {1}", "", SerializeJson.ToObject(dataTable));
-                            return Response.Error("ClientFinallyModule");
+                            return Response.Error("ModuleNotRegistred");
                         }
                     }
                     else
                     {
-                        Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotLogin"), SerializeJson.ToObject(dataTable));
-                        return Response.Error(null, "NotLogin");
+                        Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ModuleNotRegistred"), SerializeJson.ToObject(dataTable));
+                        return Response.Error(null, "ModuleNotRegistred");
                     }
                 }
                 else

@@ -8,6 +8,12 @@
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings_DB/Password",
       "secretStore": "LocalSecretsFile"
+    },
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/financialeducationecofuturodbserver/databases/BD_API_ECOFUTURO",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings_DB",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

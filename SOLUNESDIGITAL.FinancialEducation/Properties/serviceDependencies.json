@@ -6,6 +6,10 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings_DB/Password"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings_DB"
     }
   }
 }
