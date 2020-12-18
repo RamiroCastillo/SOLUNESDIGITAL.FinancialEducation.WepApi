@@ -164,6 +164,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     Phone = registrationCompleteRequest.Phone,
                     EducationLevel = registrationCompleteRequest.EducationLevel,
                     Disability = registrationCompleteRequest.Disability,
+                    TypeDisability = registrationCompleteRequest.TypeDisability,
                     ReferenceName = registrationCompleteRequest.ReferenceName,
                     ReferencePhone = registrationCompleteRequest.ReferencePhone,
                     ModificationUser = registrationCompleteRequest.AppUserId

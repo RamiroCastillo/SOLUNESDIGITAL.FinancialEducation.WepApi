@@ -147,6 +147,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 storeProcedure.AddParameter("@CLIE_NUMERO_FIJO_VC", client.Phone);
                 storeProcedure.AddParameter("@CLIE_NIVEL_EDUCACION_VC", client.EducationLevel);
                 storeProcedure.AddParameter("@CLIE_DISCAPACIDAD_BT", client.Disability);
+                storeProcedure.AddParameter("@CLIE_TIPO_DISCAPACIDAD_VC", client.TypeDisability);
                 storeProcedure.AddParameter("@CLIE_NOMBRE_REFERENCIA_VC", client.ReferenceName);
                 storeProcedure.AddParameter("@CLIE_CELULAR_REFERENCIA_VC", client.ReferencePhone);
                 storeProcedure.AddParameter("@CLIE_USUARIO_MODIFICACION_VC", userModification);
@@ -429,6 +430,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                 Phone = dataTable.Rows[0]["CLIE_NUMERO_FIJO_VC"].ToString(),
                                 EducationLevel = dataTable.Rows[0]["CLIE_NIVEL_EDUCACION_VC"].ToString(),
                                 Disability = Convert.ToBoolean(dataTable.Rows[0]["CLIE_DISCAPACIDAD_BT"]),
+                                TypeDisability = Convert.ToString(dataTable.Rows[0]["CLIE_TIPO_DISCAPACIDAD_VC"]),
                                 ReferenceName = dataTable.Rows[0]["CLIE_NOMBRE_REFERENCIA_VC"].ToString(),
                                 ReferenceCellphone = dataTable.Rows[0]["CLIE_CELULAR_REFERENCIA_VC"].ToString(),
                                 Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 1 ? "User" : "Admin",
@@ -494,6 +496,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                                         Phone = Convert.ToString(dataRow["CLIE_NUMERO_FIJO_VC"]),
                                                         EducationLevel = dataRow["CLIE_NIVEL_EDUCACION_VC"].ToString(),
                                                         Disability = Convert.ToBoolean(dataRow["CLIE_DISCAPACIDAD_BT"]),
+                                                        TypeDisability = Convert.ToString(dataRow["CLIE_TIPO_DISCAPACIDAD_VC"]),                                                       
                                                         ReferenceName = Convert.ToString(dataRow["CLIE_NOMBRE_REFERENCIA_VC"]),
                                                         ReferenceCellphone = Convert.ToString(dataRow["CLIE_CELULAR_REFERENCIA_VC"]),
                                                         Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 1 ? "User" : "Admin",

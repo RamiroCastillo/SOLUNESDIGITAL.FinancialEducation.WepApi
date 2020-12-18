@@ -29,6 +29,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses
             public string Phone { get; set; }
             public string EducationLevel { get; set; }
             public bool Disability { get; set; }
+            public string TypeDisability { get; set; }
             public string ReferenceName { get; set; }
             public string ReferenceCellphone { get; set; }
             public string Role { get; set; }

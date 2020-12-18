@@ -23,7 +23,7 @@ namespace SOLUNESDIGITAL.Tools.Images
                 stringFormatText.LineAlignment = (PdfVerticalAlignment)PdfTextAlignment.Center;
 
                 var memoryStreamImage = new MemoryStream();
-                bitmap.Save(memoryStreamImage, System.Drawing.Imaging.ImageFormat.Jpeg);
+                bitmap.Save(memoryStreamImage, System.Drawing.Imaging.ImageFormat.Png);
 
                 document.PageSettings.Orientation = PdfPageOrientation.Landscape;
                 document.PageSettings.Size = PdfPageSize.Letter;
@@ -35,6 +35,8 @@ namespace SOLUNESDIGITAL.Tools.Images
                 float spaceTotalIncrement = listParameters.First().FontSize;
                 bool firstLabel = true;
                 float fontSizeSeparate = 25;
+
+                Stream file = new FileStream(string.Format(@"{0}/Resources/BalsamiqSans-Bold.ttf", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)), FileMode.Open, FileAccess.Read, FileShare.Read);
                 foreach (var item in listParameters)
                 {
                     if (firstLabel)
@@ -54,7 +56,8 @@ namespace SOLUNESDIGITAL.Tools.Images
                             page.Graphics.DrawString(item.Label, fontLabel, PdfBrushes.Black, item.HorizontalTextDirection, (item.VerticalTextDirection - fontSizeSeparate), stringFormatText);
                         }
                     }
-                    PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSize);
+                    PdfFont font = new PdfTrueTypeFont(file, item.FontSize);
+                    //PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSize);
                     page.Graphics.DrawString(item.Value, font, PdfBrushes.Red, item.HorizontalTextDirection, item.VerticalTextDirection, stringFormatText);
                 }
                 memoryStreamImage.Dispose();

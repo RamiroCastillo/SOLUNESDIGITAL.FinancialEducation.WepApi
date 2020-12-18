@@ -30,6 +30,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
         public string EducationLevel { get; set; }
         [Required]
         public bool Disability { get; set; }
+        public string TypeDisability { get; set; }
         [Required]
         public string ReferenceName { get; set; }
         [Required]

@@ -22,6 +22,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Core.Entity
         public string Phone { get; set; }
         public string EducationLevel { get; set; }
         public bool Disability { get; set; }
+        public string TypeDisability { get; set; }
         public string ReferenceName { get; set; }
         public string ReferencePhone { get; set; }
         public bool AcceptTerms { get; set; }
