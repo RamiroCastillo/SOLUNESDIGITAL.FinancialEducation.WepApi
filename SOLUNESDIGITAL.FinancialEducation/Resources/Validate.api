@@ -12,7 +12,7 @@
     "Code": "000"
   },
   "CertificateCreatedSuccesfuly": {
-    "LongName": "La creación del certificado de realizó de manera exitosa.",
+    "LongName": "La creación del certificado se realizó de manera exitosa.",
     "Code": "000"
   },
   "VerifyEmailComplete": {
@@ -56,7 +56,7 @@
     "Code": "000"
   },
   "TokenCorrect": {
-    "LongName": "Token Valido",
+    "LongName": "Token Válido",
     "Code": "000"
   },
   "NotLogin": {
@@ -88,7 +88,7 @@
     "Code": "007"
   },
   "ErrorRegistrationComplete": {
-    "LongName": "Error al realizar el registro compelto revise si realizo el preregistro.",
+    "LongName": "Error al realizar el registro completo, revise si realizó el preregistro.",
     "Code": "008"
   },
   "ErrorGeneredTokeRefresh": {
@@ -100,7 +100,7 @@
     "Code": "010"
   },
   "ModuleNotRegistred": {
-    "LongName": "Módulo no existe o no esta registrado.",
+    "LongName": "Módulo no existe o no está registrado.",
     "Code": "011"
   },
   "ErrorRevokeToken": {
@@ -112,11 +112,11 @@
     "Code": "013"
   },
   "InvalidToken": {
-    "LongName": "Token invalido.",
+    "LongName": "Token inválido.",
     "Code": "014"
   },
   "ClientNotSession": {
-    "LongName": "El cliente no esta autorizado, no es el mismo de la sesión",
+    "LongName": "El cliente no está autorizado, no es el mismo de la sesión",
     "Code": "015"
   },
   "ClientFinallyModule": {
@@ -128,7 +128,7 @@
     "Code": "017"
   },
   "InvalidEmail": {
-    "LongName": "El correo que intento registrar no es valido.",
+    "LongName": "El correo que intentó registrar no es válido.",
     "Code": "018"
   },
   "ErrorGetWinners": {

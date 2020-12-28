@@ -58,7 +58,7 @@ namespace SOLUNESDIGITAL.Tools.Images
                     }
                     PdfFont font = new PdfTrueTypeFont(file, item.FontSize);
                     //PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSize);
-                    page.Graphics.DrawString(item.Value, font, PdfBrushes.Red, item.HorizontalTextDirection, item.VerticalTextDirection, stringFormatText);
+                    page.Graphics.DrawString(item.Value, font, PdfBrushes.OrangeRed, item.HorizontalTextDirection, item.VerticalTextDirection, stringFormatText);
                 }
                 memoryStreamImage.Dispose();
 

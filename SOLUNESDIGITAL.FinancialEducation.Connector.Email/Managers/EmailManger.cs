@@ -85,7 +85,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.Connector.Email.Managers
                 {
                     message.To.Add(item);
                     bodyMessage = finalMessage.Replace("@email", item).Replace("@link", link).Replace("@Bussines", _from).Replace("@header", header).Replace("@token", token).Replace("@numeroModulo",numberModule).Replace("@cupon",coupon).Replace("@fecha",contestDate);
-                    AlternateView view = AlternateView.CreateAlternateViewFromString(bodyMessage, null, MediaTypeNames.Text.Html);
+                    message.Body = bodyMessage;
+                    /*AlternateView view = AlternateView.CreateAlternateViewFromString(bodyMessage, null, MediaTypeNames.Text.Html);
 
                     LinkedResource resource = new LinkedResource(string.Format(@"{0}/Resources/MailImages/header-bg.png", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)),"image/png");
                     resource.ContentId = "id1";
@@ -118,7 +119,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.Connector.Email.Managers
                     view.LinkedResources.Add(resource6);
 
                     message.AlternateViews.Add(view);
-                    bodyMessage = "";
+                    bodyMessage = "";*/
 
                 }
             }

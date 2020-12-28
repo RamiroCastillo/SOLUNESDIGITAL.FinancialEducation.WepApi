@@ -149,7 +149,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 {
                     var withOriginMessageAlreadyRegisteredEmail = _configuration.GetValue<string>("Connectors_Email:WithOriginMessageAlreadyRegisteredEmail");
                     var withoutOriginMessageAlreadyRegisteredEmail = _configuration.GetValue<string>("Connectors_Email:WithoutOriginMessageAlreadyRegisteredEmail");
-                    _emailmanager.SendEmail(newClient.Email, "Verificacion de correo", withOriginMessageAlreadyRegisteredEmail, withoutOriginMessageAlreadyRegisteredEmail,"VERIFICACIÓN DE CUENTA YA EXISTENTE",Request.Headers["origin"], _configuration.GetValue<string>("Connectors_Email:link"));
+                    _emailmanager.SendEmail(newClient.Email, "Verificacion de correo", withOriginMessageAlreadyRegisteredEmail, withoutOriginMessageAlreadyRegisteredEmail,"VERIFICACIÓN DE CUENTA YA EXISTENTE",Request.Headers["origin"], _configuration.GetValue<string>("Connectors_Email:linkAlreadyRegisterEmail"));
                     var validate = Models.Response.Success(newClient, "AlreadyRegisteredEmail");
 
                     response.Data = new PreRegistrationResponse
