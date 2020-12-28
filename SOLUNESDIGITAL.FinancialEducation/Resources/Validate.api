@@ -20,7 +20,7 @@
     "Code": "000"
   },
   "RegistrationCompleted": {
-    "LongName": "Registro completo terminado.",
+    "LongName": "Se realizó el registro completo exitosamente.",
     "Code": "000"
   },
   "ForgotPasswordCheck": {
@@ -52,7 +52,7 @@
     "Code": "000"
   },
   "CorrectUserInformation": {
-    "LongName": "Información de cliente devuelta exitosamente",
+    "LongName": "Información de participante devuelta exitosamente",
     "Code": "000"
   },
   "TokenCorrect": {
@@ -76,7 +76,7 @@
     "Code": "004"
   },
   "UserNotAgeApropiate": {
-    "LongName": "El Cliente a registrase no es mayor de edad.",
+    "LongName": "El participante a registrarse no es mayor de edad.",
     "Code": "005"
   },
   "ErrorVerifyemail": {
@@ -88,7 +88,7 @@
     "Code": "007"
   },
   "ErrorRegistrationComplete": {
-    "LongName": "Error al realizar el registro completo, revise si realizó el preregistro.",
+    "LongName": "Error al realizar el registro completo, revise si realizó el pre-registro.",
     "Code": "008"
   },
   "ErrorGeneredTokeRefresh": {
@@ -116,15 +116,15 @@
     "Code": "014"
   },
   "ClientNotSession": {
-    "LongName": "El cliente no está autorizado, no es el mismo de la sesión",
+    "LongName": "El participante no está autorizado, no es el mismo de la sesión",
     "Code": "015"
   },
   "ClientFinallyModule": {
-    "LongName": "El cliente ya finalizó este módulo y no puede volver a realizarlo, verifique el modulo que esta consultando.",
+    "LongName": "El participante ya finalizó este módulo y no puede volver a realizarlo, verifique el módulo que está consultando.",
     "Code": "016"
   },
   "CouponAlreadyRegistered": {
-    "LongName": "Se generó un error al registrar su respuesta el cupon generado ya se encuentra registrado vuelva a guardar su respuesta",
+    "LongName": "Se generó un error al registrar su respuesta el cupón generado ya se encuentra registrado vuelva a guardar su respuesta",
     "Code": "017"
   },
   "InvalidEmail": {
@@ -148,7 +148,7 @@
     "Code": "098"
   },
   "Sql": {
-    "LongName": "Ha ocurrido un error y puede que el servicio no este disponible temporalmente",
+    "LongName": "Ha ocurrido un error y puede que el servicio no esté disponible temporalmente",
     "Code": "097"
   },
   "Error": {
