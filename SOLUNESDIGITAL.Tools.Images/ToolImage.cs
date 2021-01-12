@@ -11,13 +11,13 @@ namespace SOLUNESDIGITAL.Tools.Images
 {
     public class ToolImage
     {
-        public static string GetBase64Image(List<SendCertificateRequest.CertificateParameter> listParameters)
+        public static string GetBase64Image(List<SendCertificateRequest.CertificateParameter> listParameters,string moduleCompletionDay, string moduleCompletionMonth)
         {
             PdfStringFormat stringFormatText = new PdfStringFormat();
             PdfDocument document = new PdfDocument();
             try
             {
-                Image bitmap = Image.FromFile(string.Format(@"{0}/Resources/certificado.png", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
+                Image bitmap = Image.FromFile(string.Format(@"{0}/Resources/Certificado.png", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
 
                 stringFormatText.Alignment = PdfTextAlignment.Center;
                 stringFormatText.LineAlignment = (PdfVerticalAlignment)PdfTextAlignment.Center;
@@ -27,6 +27,8 @@ namespace SOLUNESDIGITAL.Tools.Images
 
                 document.PageSettings.Orientation = PdfPageOrientation.Landscape;
                 document.PageSettings.Size = PdfPageSize.Letter;
+                //document.PageSettings.Width = 702;
+                //document.PageSettings.Height = 496;
                 document.PageSettings.Margins.All = 0;
                 PdfImage image = PdfImage.FromStream(memoryStreamImage);
                 PdfPage page = document.Pages.Add();
@@ -36,7 +38,7 @@ namespace SOLUNESDIGITAL.Tools.Images
                 bool firstLabel = true;
                 float fontSizeSeparate = 25;
 
-                Stream file = new FileStream(string.Format(@"{0}/Resources/BalsamiqSans-Bold.ttf", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)), FileMode.Open, FileAccess.Read, FileShare.Read);
+                Stream file = new FileStream(string.Format(@"{0}/Resources/BalooDa2-ExtraBold.ttf", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)), FileMode.Open, FileAccess.Read, FileShare.Read);
                 foreach (var item in listParameters)
                 {
                     if (firstLabel)
@@ -60,6 +62,13 @@ namespace SOLUNESDIGITAL.Tools.Images
                     //PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, item.FontSize);
                     page.Graphics.DrawString(item.Value, font, PdfBrushes.OrangeRed, item.HorizontalTextDirection, item.VerticalTextDirection, stringFormatText);
                 }
+                Stream fileDate = new FileStream(string.Format(@"{0}/Resources/BalooDa2-Regular.ttf", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)), FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                PdfFont fontDate = new PdfTrueTypeFont(file, 11);
+
+                page.Graphics.DrawString(moduleCompletionDay, fontDate, PdfBrushes.DarkMagenta, 358, 397);
+                page.Graphics.DrawString(moduleCompletionMonth, fontDate, PdfBrushes.DarkMagenta, 396, 397);
+
                 memoryStreamImage.Dispose();
 
                 MemoryStream streamPdf = new MemoryStream();

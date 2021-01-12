@@ -10,6 +10,9 @@ namespace SOLUNESDIGITAL.FinancialEducation.Models.V1.Requests
     public class SendCertificateRequest : Token.TokenPublic
     {
         [Required]
+        public string Email { get; set; }
+
+        [Required]
         public List<CertificateParameter> CertificateParameters { get; set; }
         public class CertificateParameter 
         {

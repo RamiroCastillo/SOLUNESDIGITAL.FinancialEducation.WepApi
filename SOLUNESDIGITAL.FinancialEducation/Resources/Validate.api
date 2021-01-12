@@ -137,15 +137,19 @@
   },
   "AlreadyRegisteredCi": {
     "LongName": "Ya existe un correo registrado con el Carnet de identidad proporcionado (Ci).",
-    "Code": "019"
+    "Code": "020"
+  },
+  "ParticipantDoesNotExist": {
+    "LongName": "El correo proporcionado por no existe.",
+    "Code": "021"
+  },
+  "NotFinishAllTheModules": {
+    "LongName": "El participante no terminó todos los módulos.",
+    "Code": "022"
   },
   "Exception": {
     "LongName": "Excepción",
     "Code": "099"
-  },
-  "PaymentNotMade": {
-    "LongName": "El pago de servicio no se realizó",
-    "Code": "098"
   },
   "Sql": {
     "LongName": "Ha ocurrido un error y puede que el servicio no esté disponible temporalmente",

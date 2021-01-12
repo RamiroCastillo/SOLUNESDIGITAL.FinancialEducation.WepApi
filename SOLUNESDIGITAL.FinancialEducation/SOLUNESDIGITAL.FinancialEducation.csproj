@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Resources\Certificado.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Certificado.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\BalsamiqSans-Bold.ttf">
+    <None Update="Resources\BalooDa2-ExtraBold.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\BalooDa2-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>    
     <None Update="Resources\Validate.api">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -36,7 +36,7 @@
     </None>
     <None Update="Resources\MailImages\module-completed.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>    
+    </None>
     <None Update="Resources\Template\TemplateMail.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

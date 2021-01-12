@@ -14,6 +14,7 @@ using SOLUNESDIGITAL.FinancialEducation.Models.V1.Responses;
 using SOLUNESDIGITAL.Framework.Logs;
 using SOLUNESDIGITAL.Tools.Images;
 using System.IO;
+using SOLUNESDIGITAL.FinancialEducation.Core.Entity;
 
 namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
 {
@@ -31,9 +32,10 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
         private readonly IEmailManager _emailmanager;
         private readonly double _scoreByQuestion;
         private readonly IClienAnswer _clientAnswer;
+        private readonly IClientModule _clientModule;
 
 
-        public AdministrationController(IConfiguration configuration, ILogger logger,IUser user, IUserPolicy userPolicy, IClient client, IConsumptionHistory consumptionHistory,IEmailManager emailManager, IClienAnswer clientAnswer)
+        public AdministrationController(IConfiguration configuration, ILogger logger,IUser user, IUserPolicy userPolicy, IClient client, IConsumptionHistory consumptionHistory,IEmailManager emailManager, IClienAnswer clientAnswer,IClientModule clientModule)
         {
             _configuration = configuration;
             _logger = logger;
@@ -44,6 +46,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
             _emailmanager = emailManager;
             _scoreByQuestion = configuration.GetValue<double>("DetailScore:Score") / ((configuration.GetValue<double>("DetailScore:Modules")) + 1);
             _clientAnswer = clientAnswer;
+            _clientModule = clientModule;
         }
 
         [AllowAnonymous]
@@ -694,7 +697,16 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return Unauthorized(response);
                 }
                 #endregion
-                var pdf = ToolImage.GetBase64Image(sendCertificateRequest.CertificateParameters);
+                var customeModuleEndDate = _clientModule.GetModuleEndDate(sendCertificateRequest.Email);
+                if (customeModuleEndDate.Data == null)
+                {
+                    response.Data = null;
+                    response.Message = customeModuleEndDate.Message;
+                    response.State = customeModuleEndDate.State;
+                    return BadRequest(response);
+                }
+                var customeModuleEndDateData = (CustomModuleEndDate) customeModuleEndDate.Data;
+                var pdf = ToolImage.GetBase64Image(sendCertificateRequest.CertificateParameters, customeModuleEndDateData.Day, customeModuleEndDateData.Month);
 
                 SendCertificateResponse responseImage = new SendCertificateResponse()
                 {

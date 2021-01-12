@@ -11,6 +11,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
     public interface IClientModule
     {
         Response InsertClientModuleAnswers(string email, int numberModule, string userCreation);
+        Response GetModuleEndDate(string email);
     }
 
     public class ClientModule : IClientModule
@@ -44,7 +45,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                             {
                                 if (!dataTable.Rows[0]["RESULTADO"].Equals("01"))
                                 {
-                                    return Response.Success(new Core.Entity.Coupon 
+                                    return Response.Success(new Core.Entity.Coupon
                                     {
                                         CouponRegistred = dataTable.Rows[0]["CLMO_CUPON_VC"].ToString(),
                                         CouponNumber = dataTable.Rows[0]["MODU_NUMERO_MODULO_IN"].ToString()
@@ -72,6 +73,51 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                     {
                         Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ModuleNotRegistred"), SerializeJson.ToObject(dataTable));
                         return Response.Error(null, "ModuleNotRegistred");
+                    }
+                }
+                else
+                {
+                    Logger.Error("Message: {0}; StoreProcedure.Error: {1}", Response.CommentMenssage("Sql"), storeProcedure.Error);
+                    return Response.Error(storeProcedure.Error, "Sql");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Message: {0} Exception: {1}", ex.Message, SerializeJson.ToObject(ex));
+                return Response.Error(ex, "Error");
+            }
+        }
+        public Response GetModuleEndDate(string email)
+        {
+            try
+            {
+                StoreProcedure storeProcedure = new StoreProcedure("weco.CLIENTE_MODULO_GetModuleEndDate");
+                storeProcedure.AddParameter("@CLIE_CORREO_ELECTRONICO_VC", email);
+                DataTable dataTable = storeProcedure.ReturnData(_connection, _timeOut);
+                Logger.Debug("StoreProcedure: {0} DataTable: {1}", SerializeJson.ToObject(storeProcedure), SerializeJson.ToObject(dataTable));
+                if (storeProcedure.Error.Length <= 0)
+                {
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        if (dataTable.Rows[0]["RESULTADO"].Equals("00"))
+                        {
+
+                            return Response.Success(new Core.Entity.CustomModuleEndDate
+                            {
+                                Day = dataTable.Rows[0]["DIA"].ToString(),
+                                Month = dataTable.Rows[0]["MES"].ToString()
+                            });
+                        }
+                        else
+                        {
+                            Logger.Error("Message: {0}; DataTable: {1}", Response.CommentMenssage("ParticipantDoesNotExist"), SerializeJson.ToObject(dataTable));
+                            return Response.Error("ParticipantDoesNotExist");
+                        }
+                    }
+                    else
+                    {
+                        Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotFinishAllTheModules"), SerializeJson.ToObject(dataTable));
+                        return Response.Error(null, "NotFinishAllTheModules");
                     }
                 }
                 else
