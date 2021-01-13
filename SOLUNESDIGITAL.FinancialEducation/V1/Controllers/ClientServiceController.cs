@@ -142,14 +142,14 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return BadRequest(response);
                 }
 
-                if (registrationCompleteRequest.Age <= 18 && (DateTime.Now.Year - registrationCompleteRequest.Birthdate.Year) <= 18)
+                /*if (registrationCompleteRequest.Age <= 18 && (DateTime.Now.Year - registrationCompleteRequest.Birthdate.Year) <= 18)
                 {
                     var validate = Models.Response.Error("UserNotAgeApropiate");
                     response.Data = null;
                     response.Message = validate.Message;
                     response.State = validate.State;
                     return BadRequest(response);
-                }
+                }*/
                 Core.Entity.Client client = new Core.Entity.Client()
                 {
                     Email = registrationCompleteRequest.Email,
