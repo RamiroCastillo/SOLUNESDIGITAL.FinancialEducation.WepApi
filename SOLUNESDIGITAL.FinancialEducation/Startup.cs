@@ -169,7 +169,6 @@ namespace SOLUNESDIGITAL.FinancialEducation
             
             app.UseStaticFiles();
             
-            app.UseCors("CorsPolicy");
             
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -178,7 +177,9 @@ namespace SOLUNESDIGITAL.FinancialEducation
 
             app.UseRouting();
 
-            //app.UseCookiePolicy();
+            app.UseCors("CorsPolicy");
+
+            app.UseCookiePolicy();
 
             app.UseAuthentication();
 

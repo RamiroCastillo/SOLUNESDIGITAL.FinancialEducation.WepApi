@@ -14,7 +14,6 @@ namespace SOLUNESDIGITAL.FinancialEducation.Extensions
 {
     public static class ServiceExtensions
     {
-        private const SameSiteMode Unspecified = (SameSiteMode)(-1);
         public static void ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(options =>
@@ -24,9 +23,9 @@ namespace SOLUNESDIGITAL.FinancialEducation.Extensions
                     {
                         options.AddPolicy("CorsPolicy",
                             builder => builder
-                                .AllowAnyMethod()
-                                .AllowAnyHeader()
                                 .SetIsOriginAllowed(origin => true)
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
                                 .AllowCredentials());
                     });
             });
