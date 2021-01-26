@@ -706,9 +706,9 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     return BadRequest(response);
                 }
                 var customeModuleEndDateData = (CustomModuleEndDate) customeModuleEndDate.Data;
-                var pdf = ToolImage.GetBase64Image(sendCertificateRequest.CertificateParameters, customeModuleEndDateData.Day, customeModuleEndDateData.Month);
+                var pdf = ToolImage.GetBase64Image(sendCertificateRequest.CertificateParameters, customeModuleEndDateData.Day,customeModuleEndDateData.Month);
 
-                SendCertificateResponse responseImage = new SendCertificateResponse()
+                SendCertificateResponse responseImage = new SendCertificateResponse()  
                 {
                     pdfCertificate = pdf
                 };

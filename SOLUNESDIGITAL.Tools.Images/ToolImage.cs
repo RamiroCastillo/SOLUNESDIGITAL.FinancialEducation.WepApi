@@ -64,10 +64,10 @@ namespace SOLUNESDIGITAL.Tools.Images
                 }
                 Stream fileDate = new FileStream(string.Format(@"{0}/Resources/BalooDa2-Regular.ttf", Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)), FileMode.Open, FileAccess.Read, FileShare.Read);
 
-                PdfFont fontDate = new PdfTrueTypeFont(file, 11);
+                PdfFont fontDate = new PdfTrueTypeFont(file, 11, PdfFontStyle.Regular);
 
-                page.Graphics.DrawString(moduleCompletionDay, fontDate, PdfBrushes.DarkMagenta, 358, 397);
-                page.Graphics.DrawString(moduleCompletionMonth, fontDate, PdfBrushes.DarkMagenta, 396, 397);
+                page.Graphics.DrawString(moduleCompletionDay, fontDate, PdfBrushes.DarkMagenta, 358, 406);
+                page.Graphics.DrawString(moduleCompletionMonth, fontDate, PdfBrushes.DarkMagenta, 396, 406);
 
                 memoryStreamImage.Dispose();
 
