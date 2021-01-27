@@ -148,7 +148,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 }
                 var newClient = (Core.Entity.Client)clientCreateAcountInsert.Data;
 
-                if (newClient.VerifyExists) 
+                /*if (newClient.VerifyExists) 
                 {
                     var withOriginMessageAlreadyRegisteredEmail = _configuration.GetValue<string>("Connectors_Email:WithOriginMessageAlreadyRegisteredEmail");
                     var withoutOriginMessageAlreadyRegisteredEmail = _configuration.GetValue<string>("Connectors_Email:WithoutOriginMessageAlreadyRegisteredEmail");
@@ -164,7 +164,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                     response.State = validate.State;
                     return Ok(response);
 
-                }
+                }*/
                 var linkToken = _configuration.GetValue<string>("Connectors_Email:link") + string.Format("?token={0}",newClient.VerificationTokenEmail);
                 var withOriginMessageVerificationEmail = _configuration.GetValue<string>("Connectors_Email:WithOriginMessageVerificationEmail");
                 var withoutOriginMessageVerificationEmail = _configuration.GetValue<string>("Connectors_Email:WithoutOriginMessageVerificationEmail");

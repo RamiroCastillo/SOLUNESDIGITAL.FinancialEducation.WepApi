@@ -57,22 +57,38 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 {
                     if (dataTable.Rows.Count > 0)
                     {
-                        Core.Entity.Client result = new Core.Entity.Client
+                        switch (dataTable.Rows[0]["RESULTADO"].ToString())
                         {
-                            Id = Convert.ToInt64(dataTable.Rows[0]["CLIE_CLIENTE_ID_BI"]),
-                            Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
-                            Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
-                            CiExpedition = dataTable.Rows[0]["CLIE_CI_EXPEDICION_VC"].ToString(),
-                            VerificationTokenEmail = dataTable.Rows[0]["CLIE_TOKEN_VERIFICACION_EMAIL_VC"].ToString(),
-                            VerifyExists = Convert.ToBoolean(dataTable.Rows[0]["USER_EXISTS"])
-                        };
+                            case "00":
+                                Core.Entity.Client result = new Core.Entity.Client
+                                {
+                                    Id = Convert.ToInt64(dataTable.Rows[0]["CLIE_CLIENTE_ID_BI"]),
+                                    Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
+                                    Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
+                                    CiExpedition = dataTable.Rows[0]["CLIE_CI_EXPEDICION_VC"].ToString(),
+                                    VerificationTokenEmail = dataTable.Rows[0]["CLIE_TOKEN_VERIFICACION_EMAIL_VC"].ToString(),
+                                    //VerifyExists = Convert.ToBoolean(dataTable.Rows[0]["USER_EXISTS"])
+                                };
 
-                        return Response.Success(result);
+                                return Response.Success(result);
+                            case "01":
+                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredEmail"), SerializeJson.ToObject(dataTable));
+                                return Response.Error(dataTable, "AlreadyRegisteredEmail");
+                            case "02":
+                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredCiAndEmail"), SerializeJson.ToObject(dataTable));
+                                return Response.Error(dataTable, "AlreadyRegisteredCiAndEmail");
+                            case "03":
+                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredCi"), SerializeJson.ToObject(dataTable));
+                                return Response.Error(dataTable, "AlreadyRegisteredCi");
+                            default:
+                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("Sql"), SerializeJson.ToObject(dataTable));
+                                return Response.Error(dataTable, "Sql");
+                        }
                     }
                     else
                     {
-                        Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredCi"), SerializeJson.ToObject(dataTable));
-                        return Response.Error(dataTable, "AlreadyRegisteredCi");
+                        Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("Sql"), SerializeJson.ToObject(dataTable));
+                        return Response.Error(dataTable, "Sql");
                     }
                 }
                 else
@@ -223,8 +239,17 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                         }
                         else
                         {
-                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotLogin"), SerializeJson.ToObject(dataTable));
-                            return Response.Error(null, "NotLogin");
+                            if (dataTable.Rows[0]["RESULTADO"].ToString().Equals("02"))
+                            {
+                                Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("AccountNotValidated"), SerializeJson.ToObject(dataTable));
+                                return Response.Error(null, "AccountNotValidated");
+                            }
+                            else 
+                            {
+                                Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotLogin"), SerializeJson.ToObject(dataTable));
+                                return Response.Error(null, "NotLogin");
+                            }
+
                         }
 
                     }

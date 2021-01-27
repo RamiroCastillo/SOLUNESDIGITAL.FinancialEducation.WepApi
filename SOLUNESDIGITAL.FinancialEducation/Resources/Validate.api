@@ -4,7 +4,7 @@
     "Code": "000"
   },
   "AlreadyRegisteredEmail": {
-    "LongName": "El correo o el carnet de identidad ingresado ya fueron registrados anteriormente.",
+    "LongName": "El correo electrónico ya fue registrado anteriormente.",
     "Code": "000"
   },
   "PreRegistredCompleted": {
@@ -135,8 +135,8 @@
     "LongName": "Error al generar los ganadores.",
     "Code": "019"
   },
-  "AlreadyRegisteredCi": {
-    "LongName": "Ya existe un correo registrado con el Carnet de identidad proporcionado (Ci).",
+  "AlreadyRegisteredCiAndEmail": {
+    "LongName": "Ya existe un usuario registrado con el Correo Electrónico y N° de Documento de Identificación proporcionados.",
     "Code": "020"
   },
   "ParticipantDoesNotExist": {
@@ -146,6 +146,14 @@
   "NotFinishAllTheModules": {
     "LongName": "El participante no terminó todos los módulos.",
     "Code": "022"
+  },
+  "AlreadyRegisteredCi": {
+    "LongName": "Ya existe un usuario registrado con el N° de Documento de Identificación proporcionado.",
+    "Code": "023"
+  },
+  "AccountNotValidated": {
+    "LongName": "La cuenta con la que desea iniciar sesión aun no se encuentra validada por favor verifique su correo o vuelva a intentar crearla.",
+    "Code": "024"
   },
   "Exception": {
     "LongName": "Excepción",
