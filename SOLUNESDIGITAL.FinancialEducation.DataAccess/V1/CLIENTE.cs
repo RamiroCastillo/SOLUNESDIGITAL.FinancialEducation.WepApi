@@ -43,7 +43,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 StoreProcedure storeProcedure = new StoreProcedure("weco.CLIENTE_InsertIfNotexist");
                 storeProcedure.AddParameter("@CLIE_CORREO_ELECTRONICO_VC", client.Email);
                 storeProcedure.AddParameter("@CLIE_CI_VC", client.Ci);
-                storeProcedure.AddParameter("@CLIE_CI_EXPEDICION_VC", client.CiExpedition);                
+                storeProcedure.AddParameter("@CLIE_CI_EXPEDICION_VC", client.CiExpedition);
                 storeProcedure.AddParameter("@CLIE_CLAVE_VC", client.Password);
                 storeProcedure.AddParameter("@CLIE_TERMINOS_Y_CONDICIONES_ACEPTADOS_BT", client.AcceptTerms);
                 storeProcedure.AddParameter("@CLIE_TOKEN_VERIFICACION_EMAIL_VC", client.VerificationTokenEmail);
@@ -57,32 +57,24 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                 {
                     if (dataTable.Rows.Count > 0)
                     {
-                        switch (dataTable.Rows[0]["RESULTADO"].ToString())
+                        if (dataTable.Rows[0]["RESULTADO"].ToString().Equals("00"))
                         {
-                            case "00":
-                                Core.Entity.Client result = new Core.Entity.Client
-                                {
-                                    Id = Convert.ToInt64(dataTable.Rows[0]["CLIE_CLIENTE_ID_BI"]),
-                                    Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
-                                    Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
-                                    CiExpedition = dataTable.Rows[0]["CLIE_CI_EXPEDICION_VC"].ToString(),
-                                    VerificationTokenEmail = dataTable.Rows[0]["CLIE_TOKEN_VERIFICACION_EMAIL_VC"].ToString(),
-                                    //VerifyExists = Convert.ToBoolean(dataTable.Rows[0]["USER_EXISTS"])
-                                };
+                            Core.Entity.Client result = new Core.Entity.Client
+                            {
+                                Id = Convert.ToInt64(dataTable.Rows[0]["CLIE_CLIENTE_ID_BI"]),
+                                Email = dataTable.Rows[0]["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
+                                Ci = dataTable.Rows[0]["CLIE_CI_VC"].ToString(),
+                                CiExpedition = dataTable.Rows[0]["CLIE_CI_EXPEDICION_VC"].ToString(),
+                                VerificationTokenEmail = dataTable.Rows[0]["CLIE_TOKEN_VERIFICACION_EMAIL_VC"].ToString(),
+                            };
 
-                                return Response.Success(result);
-                            case "01":
-                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredEmail"), SerializeJson.ToObject(dataTable));
-                                return Response.Error(dataTable, "AlreadyRegisteredEmail");
-                            case "02":
-                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredCiAndEmail"), SerializeJson.ToObject(dataTable));
-                                return Response.Error(dataTable, "AlreadyRegisteredCiAndEmail");
-                            case "03":
-                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredCi"), SerializeJson.ToObject(dataTable));
-                                return Response.Error(dataTable, "AlreadyRegisteredCi");
-                            default:
-                                Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("Sql"), SerializeJson.ToObject(dataTable));
-                                return Response.Error(dataTable, "Sql");
+                            return Response.Success(result);
+
+                        }
+                        else
+                        {
+                            Logger.Debug("Message: {0} DataTable: {1}", Response.CommentMenssage("AlreadyRegisteredEmail"), SerializeJson.ToObject(dataTable));
+                            return Response.Error(dataTable, "AlreadyRegisteredEmail");
                         }
                     }
                     else
@@ -244,7 +236,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                 Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("AccountNotValidated"), SerializeJson.ToObject(dataTable));
                                 return Response.Error(null, "AccountNotValidated");
                             }
-                            else 
+                            else
                             {
                                 Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("NotLogin"), SerializeJson.ToObject(dataTable));
                                 return Response.Error(null, "NotLogin");
@@ -321,7 +313,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
             }
         }
 
-        public Response UpdateByEmailForChangePassword(string email,string resetToken, string newPassword)
+        public Response UpdateByEmailForChangePassword(string email, string resetToken, string newPassword)
         {
             try
             {
@@ -430,7 +422,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                         if (dataTable.Rows[0]["RESULTADO"].ToString().Equals("00"))
                         {
                             List<MyInformationResponse.FinishedModule> addfinishedModules = new List<MyInformationResponse.FinishedModule>();
-                            if (!string.IsNullOrEmpty(dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString())) 
+                            if (!string.IsNullOrEmpty(dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString()))
                             {
                                 addfinishedModules.AddRange(from string item in dataTable.Rows[0]["MODULOS_TERMINADOS"].ToString().Split("@")
                                                             let moduleFinish = new MyInformationResponse.FinishedModule()
@@ -468,8 +460,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                         }
                         else
                         {
-                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ErrorResetPassword"), SerializeJson.ToObject(dataTable));
-                            return Response.Error(null, "ErrorResetPassword");
+                            Logger.Error("Message: {0}; dataTable: {1}", Response.CommentMenssage("ParticipantDoesNotExist"), SerializeJson.ToObject(dataTable));
+                            return Response.Error(null, "ParticipantDoesNotExist");
                         }
                     }
                     else
@@ -505,7 +497,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                         {
                             WinnersdResponse result = new WinnersdResponse();
                             result.Winners.AddRange(from DataRow dataRow in dataTable.Rows
-                                                    let winner = new WinnersdResponse.Winner() 
+                                                    let winner = new WinnersdResponse.Winner()
                                                     {
                                                         Position = Convert.ToInt32(dataRow["POSITION"]),
                                                         Email = dataRow["CLIE_CORREO_ELECTRONICO_VC"].ToString(),
@@ -521,7 +513,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                                         Phone = Convert.ToString(dataRow["CLIE_NUMERO_FIJO_VC"]),
                                                         EducationLevel = dataRow["CLIE_NIVEL_EDUCACION_VC"].ToString(),
                                                         Disability = Convert.ToBoolean(dataRow["CLIE_DISCAPACIDAD_BT"]),
-                                                        TypeDisability = Convert.ToString(dataRow["CLIE_TIPO_DISCAPACIDAD_VC"]),                                                       
+                                                        TypeDisability = Convert.ToString(dataRow["CLIE_TIPO_DISCAPACIDAD_VC"]),
                                                         ReferenceName = Convert.ToString(dataRow["CLIE_NOMBRE_REFERENCIA_VC"]),
                                                         ReferenceCellphone = Convert.ToString(dataRow["CLIE_CELULAR_REFERENCIA_VC"]),
                                                         Role = Convert.ToInt32(dataTable.Rows[0]["CLIE_ROL_IN"]) == 1 ? "User" : "Admin",
@@ -532,10 +524,10 @@ namespace SOLUNESDIGITAL.FinancialEducation.DataAccess.V1
                                                     }
                                                     select winner);
                             List<WinnersdResponse.Winner.FinishedModule> addfinishedModules = new List<WinnersdResponse.Winner.FinishedModule>();
-                            foreach (var winner in result.Winners) 
+                            foreach (var winner in result.Winners)
                             {
                                 if (string.IsNullOrEmpty(winner.ModulesFinishComplete)) break;
-                                foreach (string module in winner.ModulesFinishComplete.Split("@")) 
+                                foreach (string module in winner.ModulesFinishComplete.Split("@"))
                                 {
                                     var finishModule = module.Split(":");
                                     winner.FinishedModules.Add(new WinnersdResponse.Winner.FinishedModule

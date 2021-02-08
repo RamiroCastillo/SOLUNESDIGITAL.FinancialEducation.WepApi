@@ -148,23 +148,7 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 }
                 var newClient = (Core.Entity.Client)clientCreateAcountInsert.Data;
 
-                /*if (newClient.VerifyExists) 
-                {
-                    var withOriginMessageAlreadyRegisteredEmail = _configuration.GetValue<string>("Connectors_Email:WithOriginMessageAlreadyRegisteredEmail");
-                    var withoutOriginMessageAlreadyRegisteredEmail = _configuration.GetValue<string>("Connectors_Email:WithoutOriginMessageAlreadyRegisteredEmail");
-                    _emailmanager.SendEmail(newClient.Email, "Verificacion de correo", withOriginMessageAlreadyRegisteredEmail, withoutOriginMessageAlreadyRegisteredEmail,"VERIFICACIÓN DE CUENTA YA EXISTENTE",Request.Headers["origin"], _configuration.GetValue<string>("Connectors_Email:linkAlreadyRegisterEmail"));
-                    var validate = Models.Response.Success(newClient, "AlreadyRegisteredEmail");
 
-                    response.Data = new PreRegistrationResponse
-                    {
-                        Email = newClient.Email,
-                        Ci = newClient.Ci,
-                    };
-                    response.Message = validate.Message;
-                    response.State = validate.State;
-                    return Ok(response);
-
-                }*/
                 var linkToken = _configuration.GetValue<string>("Connectors_Email:link") + string.Format("?token={0}",newClient.VerificationTokenEmail);
                 var withOriginMessageVerificationEmail = _configuration.GetValue<string>("Connectors_Email:WithOriginMessageVerificationEmail");
                 var withoutOriginMessageVerificationEmail = _configuration.GetValue<string>("Connectors_Email:WithoutOriginMessageVerificationEmail");
