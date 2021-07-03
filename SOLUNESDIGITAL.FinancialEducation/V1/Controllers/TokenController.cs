@@ -157,8 +157,8 @@ namespace SOLUNESDIGITAL.FinancialEducation.V1.Controllers
                 {
                     //HttpOnly = true,
                     Expires = DateTime.UtcNow.AddDays(_configuration.GetValue<double>("JwtSettings:TimeExpirationTokenRefresh")),
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
+                    SameSite = SameSiteMode.Lax,
+                    //Secure = true,
                 };
                 Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
 

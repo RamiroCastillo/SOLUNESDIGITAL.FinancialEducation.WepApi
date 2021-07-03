@@ -153,7 +153,6 @@ namespace SOLUNESDIGITAL.FinancialEducation
             //services.AddCors();
             services.ConfigureIISIntegration();
             services.ConfigureJWT(Configuration);
-            //services.ConfigureNonBreakingSameSiteCookies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
